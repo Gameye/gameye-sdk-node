@@ -21,20 +21,22 @@ export function selectPlayerList(
     //     }
 
     //     return $playerList;
-    // }
+}
 
-    /**
-     * Get a list if all players in a team.
-     *
-     * @param object $statisticState
-     * @param string $teamKey        name of the team
-     *
-     * @return array
-     */
-    // export function selectPlayerListForTeam(
-    //     $statisticState,
-    //     $teamKey
-    // ) {
+/**
+ * Get a list if all players in a team.
+ *
+ * @param object $statisticState
+ * @param string $teamKey        name of the team
+ *
+ * @return array
+ */
+export function selectPlayerListForTeam(
+    $statisticState: models.StatisticState,
+    $teamKey: string,
+) {
+    throw new errors.NotImplemented();
+
     //     $statisticState = (object) $statisticState;
 
     //     $playerList = [];

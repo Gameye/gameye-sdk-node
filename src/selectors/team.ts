@@ -21,20 +21,22 @@ export function selectTeamList(
     //     }
 
     //     return $teamList;
-    // }
+}
 
-    /**
-     * Get a single team from the statistic-state.
-     *
-     * @param object $statisticState
-     * @param string $teamKey        name of the team
-     *
-     * @return object
-     */
-    // export function selectTeamItem(
-    //     $statisticState,
-    //     $teamKey
-    // ) {
+/**
+ * Get a single team from the statistic-state.
+ *
+ * @param object $statisticState
+ * @param string $teamKey        name of the team
+ *
+ * @return object
+ */
+export function selectTeamItem(
+    $statisticState: models.StatisticState,
+    $teamKey: string,
+) {
+    throw new errors.NotImplemented();
+
     //     $statisticState = (object) $statisticState;
     //     $teamKey = (string) $teamKey;
 

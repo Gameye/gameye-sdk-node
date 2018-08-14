@@ -1,6 +1,6 @@
 ![Gameye](https://gameye.com/img/logo_blue.png)
 
-# Node.js SDK for Gameye
+# Gameye SDK for Node.js
 
 Create eSport and competitive matches for Counter-Strike: Global Offensive, Team Fortress 2, Left 4 Dead 2, Killing Floor 2, Insurgency and Day of Infamy for your platform without fixed monthly costs or any need for your own server infrastructure. Simply implement the Gameye API to kick off online matches when you need the, - you will even be able to implement the scores/statistics directly on your website. How cool is that!
 
@@ -32,7 +32,7 @@ Now, just before every comit, your code will be compiled and linted!
 
 
 ## License
-[BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php). 2017 Gameye B.V.
+[BSD (Berkeley Software Distribution) License](https://opensource.org/licenses/bsd-license.php). 2017-2018 Gameye B.V.
 
 
 ## Support

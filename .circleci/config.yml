@@ -6,7 +6,6 @@ jobs:
       - image: circleci/node:8
     steps:
       - checkout
-      - run: echo "//registry.npmjs.org/:_authToken=$NPM_TOKEN" >> .npmrc
       - restore_cache:
           key: npm-
       - run: npm install

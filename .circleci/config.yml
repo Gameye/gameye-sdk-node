@@ -1,0 +1,65 @@
+version: 2
+
+jobs:
+  prepare-npm:
+    docker: &docker_node
+      - image: circleci/node:8
+    steps:
+      - checkout
+      - restore_cache:
+          key: npm-
+      - run: npm install
+      - run: npm install tap-junit
+      - save_cache:
+          key: npm-{{ .Revision }}
+          paths:
+            - ~/.npm
+      - persist_to_workspace:
+          root: .
+          paths:
+            - node_modules
+            - node
+            - module
+            - types
+
+  lint:
+    docker: *docker_node
+    steps:
+      - checkout
+      - attach_workspace: &attach_workspace
+          at: .
+      - run: npm run lint
+
+  spec:
+    docker: *docker_node
+    steps:
+      - checkout
+      - attach_workspace: *attach_workspace
+      - run: npm run spec-all | $(npm bin)/tap-junit --output "/tmp/test-results/spec"
+      - store_test_results:
+          path: /tmp/test-results
+
+  coverage:
+    docker: *docker_node
+    steps:
+      - checkout
+      - attach_workspace: *attach_workspace
+      - run: npm run coverage
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - prepare-npm:
+          filters: &filter_all
+            tags:
+              only: /.*?/
+      - lint: &test_job
+          requires:
+            - prepare-npm
+          filters: *filter_all
+      - spec: *test_job
+      - coverage: *test_job

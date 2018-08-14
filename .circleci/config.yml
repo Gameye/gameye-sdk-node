@@ -39,6 +39,16 @@ jobs:
       - store_test_results:
           path: /tmp/test-results
 
+  coverage:
+    docker: *docker_node
+    steps:
+      - checkout
+      - attach_workspace: *attach_workspace
+      - run: npm run coverage
+      - store_artifacts:
+          path: coverage
+          destination: coverage
+
 workflows:
   version: 2
   main:
@@ -52,3 +62,4 @@ workflows:
             - prepare-npm
           filters: *filter_all
       - spec: *test_job
+      - coverage: *test_job

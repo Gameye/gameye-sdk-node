@@ -10,7 +10,7 @@ You need an API key to use this SDK, to obtain a free Gameye API key, please sen
 
 Then, install with
 ```
-npm install gameye-sdk
+npm install @gameye/sdk
 ```
 
 Typescript type declarations are automatically installed.

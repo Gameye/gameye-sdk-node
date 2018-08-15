@@ -2,7 +2,7 @@ import * as http from "http";
 import * as Koa from "koa";
 import * as route from "koa-route";
 import * as net from "net";
-import { PassThrough } from "stream";
+import * as stream from "stream";
 import { QueryPatch } from "../clients";
 import { Destructable } from "../utils";
 
@@ -96,33 +96,34 @@ export class ApiTestServer implements Destructable {
                     context.type = "application/json";
                     context.status = 200;
                     context.body = {};
+                    break;
                 }
-                case "application/x-ndjson": {
-                    const writer = new PassThrough({});
 
+                case "application/x-ndjson": {
+                    const { req, res } = context;
                     context.type = "application/x-ndjson";
                     context.status = 200;
-                    context.body = writer;
                     context.flushHeaders();
 
                     const patchListener = (patches: QueryPatch[]) => {
-                        writer.write(JSON.stringify(patches));
-                        writer.write("\n");
+                        res.write(JSON.stringify(patches));
+                        res.write("\n");
                     };
                     this.patchListenerPool.add(patchListener);
 
                     const keepAliveIntervalHandle = setInterval(() => {
-                        writer.write("\n");
+                        res.write("\n");
                     }, keepAliveInterval);
 
                     await new Promise(resolve => {
-                        context.req.on("close", resolve);
+                        req.on("close", resolve);
                     });
 
                     clearInterval(keepAliveIntervalHandle);
                     this.patchListenerPool.delete(patchListener);
 
-                    await new Promise(resolve => writer.end(resolve));
+                    await new Promise(resolve => res.end(resolve));
+                    break;
                 }
             }
         }));

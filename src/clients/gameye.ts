@@ -1,4 +1,5 @@
 import * as fetch from "isomorphic-fetch";
+import * as querystring from "querystring";
 import * as errors from "../errors";
 import { isEmpty } from "../utils";
 import { queryGame } from "./gameye-game";
@@ -57,6 +58,7 @@ export class GameyeClient {
         };
 
         const response = await fetch(url, {
+            method: "POST",
             headers,
             body: JSON.stringify(payload),
         });
@@ -70,11 +72,12 @@ export class GameyeClient {
 
     public async query<TState extends object, TArgs extends object = {}>(
         type: string,
-        payload: TArgs,
+        arg: TArgs,
         subscribe: boolean = false,
     ): Promise<TState> {
         const { endpoint, token } = this.config;
-        const url = `${endpoint}/fetch/${type}`;
+        const query = querystring.stringify(arg);
+        const url = `${endpoint}/fetch/${type}` + (query && "?") + query;
         const headers = {
             Accept: "application/json",
             Authorization: `Bearer ${token}`,
@@ -82,7 +85,6 @@ export class GameyeClient {
 
         const response = await fetch(url, {
             headers,
-            body: JSON.stringify(payload),
         });
         if (response.status !== 200) {
             throw new errors.UnexpectedResponseStatusError(

@@ -5,6 +5,6 @@ import { use } from "../utils";
 test(
     "GameyeClient queryStatistic",
     t => use(TestContext.create(), async ({ gameyeClient }) => {
-        gameyeClient.queryStatistic("");
+        await gameyeClient.queryStatistic("");
     }),
 );

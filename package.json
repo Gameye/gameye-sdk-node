@@ -27,8 +27,10 @@
   "homepage": "https://github.com/Gameye/gameye-sdk-node#readme",
   "devDependencies": {
     "@types/blue-tape": "^0.1.32",
+    "@types/koa": "^2.0.46",
     "@types/tape": "^4.2.32",
     "blue-tape": "^1.0.0",
+    "koa": "^2.5.2",
     "nyc": "^12.0.2",
     "tape": "^4.9.1",
     "ts-node": "^7.0.1",

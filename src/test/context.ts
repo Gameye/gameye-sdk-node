@@ -25,7 +25,7 @@ export class TestContext implements Destructable {
 
     private constructor(config: Partial<TestContextConfig> = {}) {
         this.config = Object.freeze({
-            ...this.constructor.prototype.defaultConfig,
+            ...TestContext.defaultConfig,
             ...config,
         });
     }

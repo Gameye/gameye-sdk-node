@@ -40,7 +40,7 @@ export class GameyeClient {
 
     public constructor(config: Partial<GameyeClientConfig> = {}) {
         this.config = Object.freeze({
-            ...this.constructor.prototype.defaultConfig,
+            ...GameyeClient.defaultConfig,
             ...config,
         });
 

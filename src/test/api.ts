@@ -34,7 +34,7 @@ export class ApiTestServer implements Destructable {
 
     private constructor(config: Partial<ApiTestServerConfig> = {}) {
         this.config = Object.freeze({
-            ...this.constructor.prototype.defaultConfig,
+            ...ApiTestServer.defaultConfig,
             ...config,
         });
 
@@ -121,6 +121,8 @@ export class ApiTestServer implements Destructable {
 
                     clearInterval(keepAliveIntervalHandle);
                     this.patchListenerPool.delete(patchListener);
+
+                    await new Promise(resolve => writer.end(resolve));
                 }
             }
         }));

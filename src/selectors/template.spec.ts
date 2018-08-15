@@ -4,39 +4,16 @@ import * as mocks from "../mocks";
 import { selectTemplateItem, selectTemplateList } from "./template";
 
 test("selectTemplateList", async t => {
-    try {
-        selectTemplateList(mocks.templateStateMock);
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
-
-    //     $templateState = GameyeMock::mockTemplate();
-    //     $templateList = GameyeSelector::selectTemplateList($templateState);
-    //     $this->assertEquals(count($templateList), 2);
-    //     $this->assertEquals($templateList['t1']->templateKey, 't1');
-    //     $this->assertEquals($templateList['t2']->templateKey, 't2');
+    const templateList = selectTemplateList(mocks.templateStateMock);
+    t.equal(templateList.length, 2);
+    t.equal(templateList.filter(i => i.templateKey === "t1").length, 1);
+    t.equal(templateList.filter(i => i.templateKey === "t2").length, 1);
 });
 
 test("selectTemplateItem", async t => {
-    try {
-        selectTemplateItem(mocks.templateStateMock, "");
-        t.fail();
+    const templateItem = selectTemplateItem(mocks.templateStateMock, "t2");
+    t.ok(templateItem);
+    if (templateItem) {
+        t.equal(templateItem.templateKey, "t2");
     }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
-
-    //     $templateState = GameyeMock::mockTemplate();
-    //     $templateItem = GameyeSelector::selectTemplateItem($templateState, 't2');
-    //     $this->assertEquals($templateItem->templateKey, 't2');
 });

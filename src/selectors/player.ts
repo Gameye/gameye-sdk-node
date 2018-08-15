@@ -1,5 +1,6 @@
-import * as errors from "../errors";
 import * as models from "../models";
+
+export type PlayerItem = models.PlayerModel;
 
 /**
  * List all players in the match.
@@ -9,62 +10,46 @@ import * as models from "../models";
  * @return array
  */
 export function selectPlayerList(
-    $statisticState: models.StatisticQueryState,
-) {
-    throw new errors.NotImplemented();
+    statisticState: models.StatisticQueryState,
+): PlayerItem[] {
+    const playerIndex = statisticState.statistic.player;
+    if (!playerIndex) return [];
 
-    //     $statisticState = (object) $statisticState;
-
-    //     $playerList = [];
-    //     foreach ($statisticState->player as $playerKey => $playerItem) {
-    //         $playerList[$playerKey] = $playerItem;
-    //     }
-
-    //     return $playerList;
+    return Object.values(playerIndex);
 }
 
 /**
  * Get a list if all players in a team.
- *
- * @param object $statisticState
- * @param string $teamKey        name of the team
- *
- * @return array
  */
 export function selectPlayerListForTeam(
-    $statisticState: models.StatisticQueryState,
-    $teamKey: string,
-) {
-    throw new errors.NotImplemented();
+    statisticState: models.StatisticQueryState,
+    teamKey: string,
+): PlayerItem[] {
+    const teamIndex = statisticState.statistic.team;
+    if (!teamIndex) return [];
 
-    //     $statisticState = (object) $statisticState;
+    if (!teamIndex[teamKey]) return [];
 
-    //     $playerList = [];
-    //     foreach ($statisticState->team->$teamKey->player as $playerKey => $playerEnabled) {
-    //         $playerItem = $statisticState->player->$playerKey;
-    //         $playerList[$playerKey] = $playerItem;
-    //     }
+    const playerIndex = statisticState.statistic.player;
+    if (!playerIndex) return [];
 
-    //     return $playerList;
+    return Object.entries(teamIndex[teamKey].player).
+        filter(([, playerEnabled]) => playerEnabled).
+        map(([playerKey]) => playerIndex[playerKey]);
 }
 
 /**
  * Get a single player in the match.
- *
- * @param object $statisticState
- *
- * @return object
  */
 export function selectPlayerItem(
-    $statisticState: models.StatisticQueryState,
-    $playerKey: string,
-) {
-    throw new errors.NotImplemented();
+    statisticState: models.StatisticQueryState,
+    playerKey: string,
+): PlayerItem | null {
+    const playerIndex = statisticState.statistic.player;
+    if (!playerIndex) return null;
 
-    //     $statisticState = (object) $statisticState;
-    //     $playerKey = (string) $playerKey;
+    const playerItem = playerIndex[playerKey];
+    if (!playerItem) return null;
 
-    //     $playerItem = $statisticState->player->$playerKey;
-
-    //     return $playerItem;
+    return playerItem;
 }

@@ -4,59 +4,26 @@ import * as mocks from "../mocks";
 import { selectPlayerItem, selectPlayerList, selectPlayerListForTeam } from "./player";
 
 test("selectPlayerList", async t => {
-    try {
-        selectPlayerList(mocks.statisticStateMock);
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
-    //     $statisticState = GameyeMock::mockStatistic();
-    //     $playerList = GameyeSelector::selectPlayerList($statisticState);
-    //     $this->assertEquals(count($playerList), 2);
-    //     $this->assertEquals($playerList['3']->playerKey, '3');
-    //     $this->assertEquals($playerList['3']->name, 'denise');
-    //     $this->assertEquals($playerList['4']->playerKey, '4');
-    //     $this->assertEquals($playerList['4']->name, 'Smashmint');
+    const playerList = selectPlayerList(mocks.statisticStateMock);
+    t.equal(playerList.length, 2);
+    t.equal(playerList.filter(i => i.playerKey === "3").length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "3")[0].name, "denise");
+    t.equal(playerList.filter(i => i.playerKey === "4").length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "4")[0].name, "Smashmint");
 });
 
 test("selectPlayerListForTeam", async t => {
-    try {
-        selectPlayerListForTeam(mocks.statisticStateMock, "");
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
-    //     $statisticState = GameyeMock::mockStatistic();
-    //     $playerList = GameyeSelector::selectPlayerListForTeam($statisticState, '1');
-    //     $this->assertEquals(count($playerList), 1);
-    //     $this->assertEquals($playerList['3']->playerKey, '3');
-    //     $this->assertEquals($playerList['3']->name, 'denise');
+    const playerList = selectPlayerListForTeam(mocks.statisticStateMock, "1");
+    t.equal(playerList.length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "3").length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "3")[0].name, "denise");
 });
 
 test("selectPlayerItem", async t => {
-    try {
-        selectPlayerItem(mocks.statisticStateMock, "");
-        t.fail();
+    const playerItem = selectPlayerItem(mocks.statisticStateMock, "4");
+    t.ok(playerItem);
+    if (playerItem) {
+        t.equal(playerItem.playerKey, "4");
+        t.equal(playerItem.name, "Smashmint");
     }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
-    //     $statisticState = GameyeMock::mockStatistic();
-    //     $playerItem = GameyeSelector::selectPlayerItem($statisticState, '4');
-    //     $this->assertEquals($playerItem->playerKey, '4');
-    //     $this->assertEquals($playerItem->name, 'Smashmint');
 });

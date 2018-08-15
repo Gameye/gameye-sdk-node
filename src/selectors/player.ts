@@ -9,7 +9,7 @@ import * as models from "../models";
  * @return array
  */
 export function selectPlayerList(
-    $statisticState: models.StatisticState,
+    $statisticState: models.StatisticQueryState,
 ) {
     throw new errors.NotImplemented();
 
@@ -32,7 +32,7 @@ export function selectPlayerList(
  * @return array
  */
 export function selectPlayerListForTeam(
-    $statisticState: models.StatisticState,
+    $statisticState: models.StatisticQueryState,
     $teamKey: string,
 ) {
     throw new errors.NotImplemented();
@@ -56,7 +56,7 @@ export function selectPlayerListForTeam(
  * @return object
  */
 export function selectPlayerItem(
-    $statisticState: models.StatisticState,
+    $statisticState: models.StatisticQueryState,
     $playerKey: string,
 ) {
     throw new errors.NotImplemented();

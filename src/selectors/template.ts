@@ -9,7 +9,7 @@ import * as models from "../models";
  * @return array
  */
 export function selectTemplateList(
-    $templateState: models.TemplateState,
+    $templateState: models.TemplateQueryState,
 ) {
     throw new errors.NotImplemented();
 
@@ -33,7 +33,7 @@ export function selectTemplateList(
  * @return object
  */
 export function selectTemplateItem(
-    $templateState: models.TemplateState,
+    $templateState: models.TemplateQueryState,
     $templateKey: string,
 ) {
     throw new errors.NotImplemented();

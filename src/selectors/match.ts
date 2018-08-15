@@ -9,7 +9,7 @@ import * as models from "../models";
  * @return array
  */
 export function selectMatchList(
-    $matchState: models.MatchState,
+    $matchState: models.MatchQueryState,
 ) {
     throw new errors.NotImplemented();
 
@@ -32,7 +32,7 @@ export function selectMatchList(
  * @return array
  */
 export function selectMatchListForGame(
-    $matchState: models.MatchState,
+    $matchState: models.MatchQueryState,
     $gameKey: string,
 ) {
     throw new errors.NotImplemented();
@@ -62,7 +62,7 @@ export function selectMatchListForGame(
  * @return object
  */
 export function selectMatchItem(
-    $matchState: models.MatchState,
+    $matchState: models.MatchQueryState,
     $matchKey: string,
 ) {
     throw new errors.NotImplemented();

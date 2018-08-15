@@ -54,4 +54,15 @@ export class GameyeClient {
         }
     }
 
+    private command<TPayload extends object>(
+        type: string,
+        payload: TPayload,
+    ) {
+        throw new errors.NotImplemented();
+    }
+
+    private query() {
+        throw new errors.NotImplemented();
+    }
+
 }

@@ -1,10 +1,15 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
+import * as models from "../models";
 import { selectMatchItem, selectMatchList, selectMatchListForGame } from "./match";
+
+const matchState: models.MatchQueryState = {
+    match: {},
+};
 
 test("selectMatchList", async t => {
     try {
-        selectMatchList({});
+        selectMatchList(matchState);
         t.fail();
     }
     catch (err) {
@@ -18,7 +23,7 @@ test("selectMatchList", async t => {
 
 test("selectMatchListForGame", async t => {
     try {
-        selectMatchListForGame({}, "");
+        selectMatchListForGame(matchState, "");
         t.fail();
     }
     catch (err) {
@@ -32,7 +37,7 @@ test("selectMatchListForGame", async t => {
 
 test("selectMatchItem", async t => {
     try {
-        selectMatchItem({}, "");
+        selectMatchItem(matchState, "");
         t.fail();
     }
     catch (err) {

@@ -41,8 +41,10 @@
   },
   "dependencies": {
     "@types/isomorphic-fetch": "0.0.34",
+    "@types/request": "^2.47.1",
     "deepkit": "^0.1.1",
     "isomorphic-fetch": "^2.2.1",
+    "request": "^2.88.0",
     "tslib": "^1.9.3"
   }
 }

@@ -1,6 +1,5 @@
 import { transform } from "deepkit";
-import { EventEmitter } from "events";
-import { __values } from "tslib";
+import * as stream from "stream";
 import { Destructable } from "../utils";
 
 export interface QueryPatch {
@@ -8,37 +7,48 @@ export interface QueryPatch {
     value: any;
 }
 
+const closed = Symbol();
+
 export class QuerySubscription<TState extends object> implements Destructable {
     private lastState: TState | undefined;
     private readBuffer = "";
+    private closePromise!: Promise<typeof closed>;
 
-    constructor(private reader: ReadableStreamReader) {
+    constructor(private reader: stream.Readable) {
+        this.initializeReader();
     }
 
     public async destroy() {
-        await this.reader.cancel();
+        this.reader.destroy();
     }
 
     public async nextState() {
         const { lastState } = this;
         const { patches, more } = await this.nextPatches();
-        const nextState = transform<TState>(
+        const state = transform<TState>(
             lastState || {} as any,
             ({ set }) => patches.forEach(({ path, value }) => set(path, value)),
         );
-        return { nextState, more };
+        return { state, more };
     }
 
-    public async nextPatches() {
+    private async nextPatches() {
         const { line, more } = await this.nextLine();
 
         const patches: QueryPatch[] = line ? JSON.parse(line) : [];
         return { patches, more };
     }
 
-    private async nextLine() {
+    private initializeReader() {
         const { reader } = this;
+        reader.on("data", chunk => {
+            this.readBuffer += chunk;
+        });
+        this.closePromise = new Promise(resolve => reader.once("close", () => resolve(closed)));
+        reader.resume();
+    }
 
+    private async nextLine() {
         while (true) {
             const { readBuffer } = this;
             const newlineIndex = readBuffer.indexOf("\n");
@@ -49,9 +59,12 @@ export class QuerySubscription<TState extends object> implements Destructable {
                 return { line, more: true };
             }
 
-            const { chunk, more } = await reader.read();
-            if (!more) return { line: "", more: false };
-            this.readBuffer += chunk;
+            const result = await Promise.race([
+                this.closePromise,
+                await new Promise(resolve => this.reader.once("data", resolve)),
+            ]);
+
+            if (result === closed) return { line: "", more: false };
         }
     }
 

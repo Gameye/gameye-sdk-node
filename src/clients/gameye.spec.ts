@@ -45,6 +45,15 @@ test(
     "GameyeClient subscriptions",
     t => use(TestContext.create(), async ({ gameyeClient, apiTestServer }) => {
         const subscription = await gameyeClient.subscribe("testing", {});
+        apiTestServer.emitPatches([
+            { path: ["number"], value: 1 },
+        ]);
+        {
+            const { state, more } = await subscription.nextState();
+            t.equal(more, true);
+            t.deepEqual(state, { number: 1 });
+        }
+        await new Promise(resolve => setTimeout(resolve, 2000));
         await subscription.destroy();
     }),
 );

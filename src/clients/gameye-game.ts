@@ -3,7 +3,12 @@ import { GameyeClient } from "./gameye";
 
 export function queryGame(
     this: GameyeClient,
-    subscribe = false,
 ) {
-    return this.query<models.GameQueryState>("game", {}, subscribe);
+    return this.query<models.GameQueryState>("game", {});
+}
+
+export function subscribeGame(
+    this: GameyeClient,
+) {
+    return this.subscribe<models.GameQueryState>("game", {});
 }

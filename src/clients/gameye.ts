@@ -1,5 +1,5 @@
-import * as fetch from "isomorphic-fetch";
-import * as querystring from "querystring";
+import * as request from "request";
+import { QuerySubscription } from ".";
 import * as errors from "../errors";
 import { isEmpty } from "../utils";
 import { queryGame } from "./gameye-game";
@@ -37,9 +37,9 @@ export class GameyeClient {
 
     private config: Readonly<GameyeClientConfig>;
 
-    public constructor(config: Partial<GameyeClientConfig>) {
+    public constructor(config: Partial<GameyeClientConfig> = {}) {
         this.config = Object.freeze({
-            ...this.constructor.prototype.defaultConfig,
+            ...GameyeClient.defaultConfig,
             ...config,
         });
 
@@ -52,20 +52,19 @@ export class GameyeClient {
     ): Promise<void> {
         const { endpoint, token } = this.config;
         const url = `${endpoint}/action/${type}`;
-        const headers = {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
-        };
-
-        const response = await fetch(url, {
-            method: "POST",
-            headers,
-            body: JSON.stringify(payload),
-        });
-        if (response.status !== 202) {
+        const response = await new Promise<request.Response>(
+            (resolve, reject) => request.post(url, {
+                body: payload,
+                json: true,
+                auth: { bearer: token },
+            }).
+                on("error", reject).
+                on("response", resolve),
+        );
+        if (response.statusCode !== 202) {
             throw new errors.UnexpectedResponseStatusError(
                 202,
-                response.status,
+                response.statusCode,
             );
         }
     }
@@ -73,28 +72,54 @@ export class GameyeClient {
     public async query<TState extends object, TArgs extends object = {}>(
         type: string,
         arg: TArgs,
-        subscribe: boolean = false,
     ): Promise<TState> {
         const { endpoint, token } = this.config;
-        const query = querystring.stringify(arg);
-        const url = `${endpoint}/fetch/${type}` + (query && "?") + query;
-        const headers = {
-            Accept: "application/json",
-            Authorization: `Bearer ${token}`,
-        };
-
-        const response = await fetch(url, {
-            headers,
-        });
-        if (response.status !== 200) {
+        const url = `${endpoint}/fetch/${type}`;
+        const response = await new Promise<request.Response>(
+            (resolve, reject) => request.get(url, {
+                qs: arg,
+                auth: { bearer: token },
+                headers: { accept: "application/json" },
+            }).
+                on("error", reject).
+                on("response", resolve),
+        );
+        if (response.statusCode !== 200) {
             throw new errors.UnexpectedResponseStatusError(
                 200,
-                response.status,
+                response.statusCode,
             );
         }
 
-        const state: TState = await response.json();
-        return state;
+        const { body } = await response.toJSON();
+        return body;
+    }
+
+    public async subscribe<TState extends object, TArgs extends object = {}>(
+        type: string,
+        arg: TArgs,
+    ): Promise<QuerySubscription<TState>> {
+        const { endpoint, token } = this.config;
+        const url = `${endpoint}/fetch/${type}`;
+        const response = await new Promise<request.Response>(
+            (resolve, reject) =>
+                request.get(url, {
+                    qs: arg,
+                    auth: { bearer: token },
+                    headers: { accept: "application/x-ndjson" },
+                }).
+                    on("error", reject).
+                    on("response", resolve),
+        );
+        if (response.statusCode !== 200) {
+            throw new errors.UnexpectedResponseStatusError(
+                200,
+                response.statusCode,
+            );
+        }
+
+        const subscription = new QuerySubscription<TState>(response);
+        return subscription;
     }
 
     private validateConfig() {

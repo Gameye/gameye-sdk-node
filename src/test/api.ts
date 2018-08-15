@@ -2,24 +2,42 @@ import * as http from "http";
 import * as Koa from "koa";
 import * as route from "koa-route";
 import * as net from "net";
+import * as stream from "stream";
+import { QueryPatch } from "../clients";
 import { Destructable } from "../utils";
 
 export interface ApiTestServerConfig {
     token: string;
+    keepAliveInterval: number;
 }
 
+type PatchListener = (patches: QueryPatch[]) => void;
+
 export class ApiTestServer implements Destructable {
-    public static async create(config: ApiTestServerConfig) {
+    public static defaultConfig = Object.freeze<ApiTestServerConfig>({
+        token: "super-secret",
+        keepAliveInterval: 1300,
+    });
+
+    public static async create(config: Partial<ApiTestServerConfig> = {}) {
         const instance = new this(config);
         await instance.initialize();
         return instance;
     }
 
+    private config: Readonly<ApiTestServerConfig>;
+
     private koaServer = new Koa();
     private httpServer = http.createServer();
     private socketPool = new Set<net.Socket>();
+    private patchListenerPool = new Set<PatchListener>();
 
-    private constructor(private config: ApiTestServerConfig) {
+    private constructor(config: Partial<ApiTestServerConfig> = {}) {
+        this.config = Object.freeze({
+            ...ApiTestServer.defaultConfig,
+            ...config,
+        });
+
         this.initializeHttpServer();
         this.initializeMiddleware();
     }
@@ -28,6 +46,11 @@ export class ApiTestServer implements Destructable {
         const address = this.httpServer.address();
         if (typeof address === "string") return address;
         return `http://localhost:${address.port}`;
+    }
+
+    public emitPatches(patches: QueryPatch[]) {
+        const { patchListenerPool } = this;
+        patchListenerPool.forEach(listener => listener(patches));
     }
 
     public async destroy() {
@@ -53,7 +76,7 @@ export class ApiTestServer implements Destructable {
     }
 
     private initializeMiddleware() {
-        const { token } = this.config;
+        const { token, keepAliveInterval } = this.config;
         const { koaServer } = this;
 
         koaServer.use((context, next) => {
@@ -67,9 +90,42 @@ export class ApiTestServer implements Destructable {
             context.status = 202;
         }));
 
-        koaServer.use(route.get("/fetch/*", context => {
-            context.status = 200;
-            context.body = {};
+        koaServer.use(route.get("/fetch/*", async context => {
+            switch (context.request.accepts("application/json", "application/x-ndjson")) {
+                case "application/json": {
+                    context.type = "application/json";
+                    context.status = 200;
+                    context.body = {};
+                    break;
+                }
+
+                case "application/x-ndjson": {
+                    const { req, res } = context;
+                    context.type = "application/x-ndjson";
+                    context.status = 200;
+                    context.flushHeaders();
+
+                    const patchListener = (patches: QueryPatch[]) => {
+                        res.write(JSON.stringify(patches));
+                        res.write("\n");
+                    };
+                    this.patchListenerPool.add(patchListener);
+
+                    const keepAliveIntervalHandle = setInterval(() => {
+                        res.write("\n");
+                    }, keepAliveInterval);
+
+                    await new Promise(resolve => {
+                        req.on("close", resolve);
+                    });
+
+                    clearInterval(keepAliveIntervalHandle);
+                    this.patchListenerPool.delete(patchListener);
+
+                    await new Promise(resolve => res.end(resolve));
+                    break;
+                }
+            }
         }));
 
     }
@@ -96,4 +152,5 @@ export class ApiTestServer implements Destructable {
             else resolve();
         }));
     }
+
 }

@@ -1,5 +1,6 @@
 import * as http from "http";
 import * as Koa from "koa";
+import * as route from "koa-route";
 import * as net from "net";
 import { Destructable } from "../utils";
 
@@ -19,18 +20,8 @@ export class ApiTestServer implements Destructable {
     private socketPool = new Set<net.Socket>();
 
     private constructor(private config: ApiTestServerConfig) {
-        const { httpServer, socketPool } = this;
-
-        httpServer.on(
-            "request",
-            this.koaServer.callback(),
-        );
-
-        httpServer.on("connection", socket => {
-            socketPool.add(socket);
-            socket.once("close", () => socketPool.delete(socket));
-        });
-
+        this.initializeHttpServer();
+        this.initializeMiddleware();
     }
 
     public getEndpoint() {
@@ -61,8 +52,46 @@ export class ApiTestServer implements Destructable {
         });
     }
 
+    private initializeMiddleware() {
+        const { token } = this.config;
+        const { koaServer } = this;
+
+        koaServer.use((context, next) => {
+            if (context.request.header.authorization !== `Bearer ${token}`) {
+                return context.throw(403);
+            }
+            return next();
+        });
+
+        koaServer.use(route.post("/action/*", context => {
+            context.status = 202;
+        }));
+
+        koaServer.use(route.get("/fetch/*", context => {
+            context.status = 200;
+            context.body = {};
+        }));
+
+    }
+
+    private initializeHttpServer() {
+        const { httpServer, koaServer, socketPool } = this;
+
+        httpServer.on(
+            "request",
+            koaServer.callback(),
+        );
+
+        httpServer.on("connection", socket => {
+            socketPool.add(socket);
+            socket.once("close", () => socketPool.delete(socket));
+        });
+    }
+
     private async initialize() {
-        await new Promise((resolve, reject) => this.httpServer.listen(0, (err: any) => {
+        const { httpServer } = this;
+
+        await new Promise((resolve, reject) => httpServer.listen({ port: 0 }, (err: any) => {
             if (err) return reject();
             else resolve();
         }));

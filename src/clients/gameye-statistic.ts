@@ -1,10 +1,16 @@
-import * as errors from "../errors";
+import * as models from "../models";
 import { GameyeClient } from "./gameye";
+
+export interface StatisticQueryArg {
+    matchKey: string;
+}
 
 export function queryStatistic(
     this: GameyeClient,
     matchKey: string,
     subscribe = false,
 ) {
-    throw new errors.NotImplemented();
+    return this.query<models.StatisticQueryState, StatisticQueryArg>("statistic", {
+        matchKey,
+    }, subscribe);
 }

@@ -1,36 +1,22 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectTeamItem, selectTeamList } from "./team";
 
-const statisticState: models.StatisticQueryState = {
-    statistic: {},
-};
-
 test("selectTeamList", async t => {
-    try {
-        selectTeamList(statisticState);
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
+    const teamList = selectTeamList(mocks.statisticStateMock);
+    t.equal(teamList.length, 2);
+    t.equal(teamList.filter(i => i.teamKey === "1").length, 1);
+    t.equal(teamList.filter(i => i.teamKey === "1")[0].name, "TeamA");
+    t.equal(teamList.filter(i => i.teamKey === "2").length, 1);
+    t.equal(teamList.filter(i => i.teamKey === "2")[0].name, "TeamB");
 });
 
 test("selectTeamItem", async t => {
-    try {
-        selectTeamItem(statisticState, "");
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
+    const teamItem = selectTeamItem(mocks.statisticStateMock, "2");
+    t.ok(teamItem);
+    if (teamItem) {
+        t.equal(teamItem.teamKey, "2");
+        t.equal(teamItem.name, "TeamB");
     }
 });

@@ -1,23 +1,9 @@
 import * as test from "blue-tape";
-import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectLocationListForGame } from "./location";
 
-const gameState: models.GameQueryState = {
-    game: {},
-    location: {},
-};
-
 test("selectLocationListForGame", async t => {
-    try {
-        selectLocationListForGame(gameState, "");
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
+    const locationList = selectLocationListForGame(mocks.gameStateMock, "test");
+    t.equal(locationList.length, 1);
+    t.equal(locationList.filter(i => i.locationKey === "local").length, 1);
 });

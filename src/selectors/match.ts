@@ -1,76 +1,40 @@
-import * as errors from "../errors";
 import * as models from "../models";
+
+export type MatchItem = models.MatchQueryMatchItem;
 
 /**
  * Select a list of active matches.
- *
- * @param object $matchState
- *
- * @return array
  */
 export function selectMatchList(
-    $matchState: models.MatchQueryState,
-) {
-    throw new errors.NotImplemented();
-
-    //     $matchState = (object) $matchState;
-
-    //     $matchList = [];
-    //     foreach ($matchState->match as $matchKey => $matchItem) {
-    //         $matchList[$matchKey] = $matchItem;
-    //     }
-
-    //     return $matchList;
+    matchState: models.MatchQueryState,
+): MatchItem[] {
+    return Object.values(matchState.match).
+        filter(Boolean).
+        map(i => i as MatchItem);
 }
 
 /**
  * Select a list of active matches for a game.
- *
- * @param object $matchState
- * @param string $gameKey
- *
- * @return array
  */
 export function selectMatchListForGame(
-    $matchState: models.MatchQueryState,
-    $gameKey: string,
-) {
-    throw new errors.NotImplemented();
-
-    //     $matchState = (object) $matchState;
-    //     $gameKey = (string) $gameKey;
-
-    //     $matchList = [];
-    //     foreach ($matchState->match as $matchKey => $matchItem) {
-    //         if ($matchItem->gameKey != $gameKey) {
-    //             continue;
-    //         }
-
-    //         $matchList[$matchKey] = $matchItem;
-    //     }
-
-    //     return $matchList;
+    matchState: models.MatchQueryState,
+    gameKey: string,
+): MatchItem[] {
+    return Object.values(matchState.match).
+        filter(Boolean).
+        map(i => i as MatchItem).
+        filter(i => i.gameKey === gameKey);
 }
 
 /**
  * Get details about a single match from a match-state as returned by
  * the gameye api.
- *
- * @param object $matchState
- * @param string $matchKey
- *
- * @return object
  */
 export function selectMatchItem(
-    $matchState: models.MatchQueryState,
-    $matchKey: string,
-) {
-    throw new errors.NotImplemented();
-
-    //     $matchState = (object) $matchState;
-    //     $matchKey = (string) $matchKey;
-
-    //     $matchItem = $matchState->match->$matchKey;
-
-    //     return $matchItem;
+    matchState: models.MatchQueryState,
+    matchKey: string,
+): MatchItem | null {
+    const matchItem = matchState.match[matchKey];
+    if (!matchItem) return null;
+    return matchItem;
 }

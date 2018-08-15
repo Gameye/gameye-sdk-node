@@ -1,21 +1,10 @@
 import * as test from "blue-tape";
-import * as errors from "../errors";
-import { GameyeClient } from "./gameye";
+import { TestContext } from "../test";
+import { use } from "../utils";
 
-test("GameyeClient queryGame", async t => {
-    const client = new GameyeClient({
-        token: "123",
-        endpoint: "http://localhost",
-    });
-    try {
-        client.queryGame();
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
-});
+test(
+    "GameyeClient queryGame",
+    t => use(TestContext.create(), async ({ gameyeClient }) => {
+        await gameyeClient.queryGame();
+    }),
+);

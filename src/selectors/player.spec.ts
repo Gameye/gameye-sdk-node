@@ -1,50 +1,29 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectPlayerItem, selectPlayerList, selectPlayerListForTeam } from "./player";
 
-const statisticState: models.StatisticQueryState = {
-    statistic: {},
-};
-
 test("selectPlayerList", async t => {
-    try {
-        selectPlayerList(statisticState);
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
+    const playerList = selectPlayerList(mocks.statisticStateMock);
+    t.equal(playerList.length, 2);
+    t.equal(playerList.filter(i => i.playerKey === "3").length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "3")[0].name, "denise");
+    t.equal(playerList.filter(i => i.playerKey === "4").length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "4")[0].name, "Smashmint");
 });
 
 test("selectPlayerListForTeam", async t => {
-    try {
-        selectPlayerListForTeam(statisticState, "");
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
+    const playerList = selectPlayerListForTeam(mocks.statisticStateMock, "1");
+    t.equal(playerList.length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "3").length, 1);
+    t.equal(playerList.filter(i => i.playerKey === "3")[0].name, "denise");
 });
 
 test("selectPlayerItem", async t => {
-    try {
-        selectPlayerItem(statisticState, "");
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
+    const playerItem = selectPlayerItem(mocks.statisticStateMock, "4");
+    t.ok(playerItem);
+    if (playerItem) {
+        t.equal(playerItem.playerKey, "4");
+        t.equal(playerItem.name, "Smashmint");
     }
 });

@@ -1,50 +1,25 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectMatchItem, selectMatchList, selectMatchListForGame } from "./match";
 
-const matchState: models.MatchQueryState = {
-    match: {},
-};
-
 test("selectMatchList", async t => {
-    try {
-        selectMatchList(matchState);
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
+    const matchList = selectMatchList(mocks.matchStateMock);
+    t.equal(matchList.length, 2);
+    t.equal(matchList.filter(i => i.matchKey === "test-match-123").length, 1);
+    t.equal(matchList.filter(i => i.matchKey === "test-match-456").length, 1);
 });
 
 test("selectMatchListForGame", async t => {
-    try {
-        selectMatchListForGame(matchState, "");
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
-    }
+    const matchList = selectMatchListForGame(mocks.matchStateMock, "test");
+    t.equal(matchList.length, 1);
+    t.equal(matchList.filter(i => i.matchKey === "test-match-123").length, 1);
 });
 
 test("selectMatchItem", async t => {
-    try {
-        selectMatchItem(matchState, "");
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.NotImplemented) {
-            t.pass();
-            err = null;
-        }
-        if (err) throw err;
+    const matchItem = selectMatchItem(mocks.matchStateMock, "test-match-123");
+    t.ok(matchItem);
+    if (matchItem) {
+        t.equal(matchItem.matchKey, "test-match-123");
     }
 });

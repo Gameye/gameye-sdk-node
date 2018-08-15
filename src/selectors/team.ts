@@ -1,46 +1,31 @@
-import * as errors from "../errors";
 import * as models from "../models";
+
+export type TeamItem = models.TeamModel;
 
 /**
  * Get a list of all teams in the statistic-state.
- *
- * @param object $statisticState
- *
- * @return array
  */
 export function selectTeamList(
-    $statisticState: models.StatisticQueryState,
-) {
-    throw new errors.NotImplemented();
+    statisticState: models.StatisticQueryState,
+): TeamItem[] {
+    const teamIndex = statisticState.statistic.team;
+    if (!teamIndex) return [];
 
-    //     $statisticState = (object) $statisticState;
-
-    //     $teamList = [];
-    //     foreach ($statisticState->team as $teamKey => $teamItem) {
-    //         $teamList[$teamKey] = $teamItem;
-    //     }
-
-    //     return $teamList;
+    return Object.values(teamIndex);
 }
 
 /**
  * Get a single team from the statistic-state.
- *
- * @param object $statisticState
- * @param string $teamKey        name of the team
- *
- * @return object
  */
 export function selectTeamItem(
-    $statisticState: models.StatisticQueryState,
-    $teamKey: string,
-) {
-    throw new errors.NotImplemented();
+    statisticState: models.StatisticQueryState,
+    teamKey: string,
+): TeamItem | null {
+    const teamIndex = statisticState.statistic.team;
+    if (!teamIndex) return null;
 
-    //     $statisticState = (object) $statisticState;
-    //     $teamKey = (string) $teamKey;
+    const teamItem = teamIndex[teamKey];
+    if (!teamItem) return null;
 
-    //     $teamItem = $statisticState->team->$teamKey;
-
-    //     return $teamItem;
+    return teamItem;
 }

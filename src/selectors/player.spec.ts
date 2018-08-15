@@ -1,15 +1,11 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectPlayerItem, selectPlayerList, selectPlayerListForTeam } from "./player";
-
-const statisticState: models.StatisticQueryState = {
-    statistic: {},
-};
 
 test("selectPlayerList", async t => {
     try {
-        selectPlayerList(statisticState);
+        selectPlayerList(mocks.statisticStateMock);
         t.fail();
     }
     catch (err) {
@@ -23,7 +19,7 @@ test("selectPlayerList", async t => {
 
 test("selectPlayerListForTeam", async t => {
     try {
-        selectPlayerListForTeam(statisticState, "");
+        selectPlayerListForTeam(mocks.statisticStateMock, "");
         t.fail();
     }
     catch (err) {
@@ -37,7 +33,7 @@ test("selectPlayerListForTeam", async t => {
 
 test("selectPlayerItem", async t => {
     try {
-        selectPlayerItem(statisticState, "");
+        selectPlayerItem(mocks.statisticStateMock, "");
         t.fail();
     }
     catch (err) {

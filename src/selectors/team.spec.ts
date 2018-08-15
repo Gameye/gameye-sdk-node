@@ -1,15 +1,11 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectTeamItem, selectTeamList } from "./team";
-
-const statisticState: models.StatisticQueryState = {
-    statistic: {},
-};
 
 test("selectTeamList", async t => {
     try {
-        selectTeamList(statisticState);
+        selectTeamList(mocks.statisticStateMock);
         t.fail();
     }
     catch (err) {
@@ -23,7 +19,7 @@ test("selectTeamList", async t => {
 
 test("selectTeamItem", async t => {
     try {
-        selectTeamItem(statisticState, "");
+        selectTeamItem(mocks.statisticStateMock, "");
         t.fail();
     }
     catch (err) {

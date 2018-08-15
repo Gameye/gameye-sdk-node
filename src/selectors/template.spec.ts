@@ -1,15 +1,11 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectTemplateItem, selectTemplateList } from "./template";
-
-const templateState: models.TemplateQueryState = {
-    template: {},
-};
 
 test("selectTemplateList", async t => {
     try {
-        selectTemplateList(templateState);
+        selectTemplateList(mocks.templateStateMock);
         t.fail();
     }
     catch (err) {
@@ -23,7 +19,7 @@ test("selectTemplateList", async t => {
 
 test("selectTemplateItem", async t => {
     try {
-        selectTemplateItem(templateState, "");
+        selectTemplateItem(mocks.templateStateMock, "");
         t.fail();
     }
     catch (err) {

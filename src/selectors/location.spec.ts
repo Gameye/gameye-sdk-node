@@ -1,16 +1,11 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
-import * as models from "../models";
+import * as mocks from "../mocks";
 import { selectLocationListForGame } from "./location";
-
-const gameState: models.GameQueryState = {
-    game: {},
-    location: {},
-};
 
 test("selectLocationListForGame", async t => {
     try {
-        selectLocationListForGame(gameState, "");
+        selectLocationListForGame(mocks.gameStateMock, "");
         t.fail();
     }
     catch (err) {

@@ -43,7 +43,12 @@ export function commandStopMatch(
 
 export function queryMatch(
     this: GameyeClient,
-    subscribe = false,
 ) {
-    return this.query<models.MatchQueryState>("match", {}, subscribe);
+    return this.query<models.MatchQueryState>("match", {});
+}
+
+export function subscribeMatch(
+    this: GameyeClient,
+) {
+    return this.subscribe<models.MatchQueryState>("match", {});
 }

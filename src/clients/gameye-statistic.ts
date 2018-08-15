@@ -8,9 +8,17 @@ export interface StatisticQueryArg {
 export function queryStatistic(
     this: GameyeClient,
     matchKey: string,
-    subscribe = false,
 ) {
     return this.query<models.StatisticQueryState, StatisticQueryArg>("statistic", {
         matchKey,
-    }, subscribe);
+    });
+}
+
+export function subscribeStatistic(
+    this: GameyeClient,
+    matchKey: string,
+) {
+    return this.subscribe<models.StatisticQueryState, StatisticQueryArg>("statistic", {
+        matchKey,
+    });
 }

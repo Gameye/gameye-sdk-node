@@ -1,5 +1,6 @@
 import * as fetch from "isomorphic-fetch";
 import * as querystring from "querystring";
+import { QuerySubscription } from ".";
 import * as errors from "../errors";
 import { isEmpty } from "../utils";
 import { queryGame } from "./gameye-game";
@@ -73,7 +74,6 @@ export class GameyeClient {
     public async query<TState extends object, TArgs extends object = {}>(
         type: string,
         arg: TArgs,
-        subscribe: boolean = false,
     ): Promise<TState> {
         const { endpoint, token } = this.config;
         const query = querystring.stringify(arg);
@@ -95,6 +95,36 @@ export class GameyeClient {
 
         const state: TState = await response.json();
         return state;
+    }
+
+    public async subscribe<TState extends object, TArgs extends object = {}>(
+        type: string,
+        arg: TArgs,
+    ): Promise<QuerySubscription<TState>> {
+        const { endpoint, token } = this.config;
+        const query = querystring.stringify(arg);
+        const url = `${endpoint}/fetch/${type}` + (query && "?") + query;
+        const headers = {
+            Accept: "application/x-ndjson",
+            Authorization: `Bearer ${token}`,
+        };
+
+        const response = await fetch(url, {
+            headers,
+        });
+        if (response.status !== 200) {
+            throw new errors.UnexpectedResponseStatusError(
+                200,
+                response.status,
+            );
+        }
+
+        const { body } = response;
+        if (!body) throw new errors.ExpectedBodyError();
+
+        const reader = body.getReader();
+        const subscription = new QuerySubscription<TState>(reader);
+        return subscription;
     }
 
     private validateConfig() {

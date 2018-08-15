@@ -10,7 +10,7 @@ import * as models from "../models";
  * @return array
  */
 export function selectLocationListForGame(
-    $gameState: models.GameState,
+    $gameState: models.GameQueryState,
     $gameKey: string,
 ) {
     throw new errors.NotImplemented();

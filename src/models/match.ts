@@ -1,2 +1,18 @@
-// tslint:disable-next-line:no-empty-interface
-export interface MatchState { }
+export interface MatchQueryState {
+    match: MatchQueryMatchIndex;
+}
+
+export interface MatchQueryMatchIndex {
+    [matchKey: string]: MatchQueryMatchItem | null;
+}
+
+export interface MatchQueryMatchItem {
+    matchKey: string;
+    gameKey: string;
+    locationKey: string;
+    host: string;
+    created: number;
+    port: {
+        [name: string]: number,
+    };
+}

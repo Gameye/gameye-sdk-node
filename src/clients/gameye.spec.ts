@@ -1,5 +1,7 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
+import { TestContext } from "../test";
+import { use } from "../utils";
 import { GameyeClient } from "./gameye";
 
 test("GameyeClient instantiation", async t => {
@@ -38,3 +40,11 @@ test("GameyeClient config errors", async t => {
         if (err) throw err;
     }
 });
+
+test(
+    "GameyeClient subscriptions",
+    t => use(TestContext.create(), async ({ gameyeClient, apiTestServer }) => {
+        const subscription = await gameyeClient.subscribe("testing", {});
+        await subscription.destroy();
+    }),
+);

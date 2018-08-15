@@ -38,7 +38,7 @@ export class GameyeClient {
 
     private config: Readonly<GameyeClientConfig>;
 
-    public constructor(config: Partial<GameyeClientConfig>) {
+    public constructor(config: Partial<GameyeClientConfig> = {}) {
         this.config = Object.freeze({
             ...this.constructor.prototype.defaultConfig,
             ...config,

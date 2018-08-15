@@ -15,4 +15,8 @@ test("selectLocationListForGame", async t => {
         }
         if (err) throw err;
     }
+    //     $gameState = GameyeMock::mockGame();
+    //     $locationList = GameyeSelector::selectLocationListForGame($gameState, 'test');
+    //     $this->assertEquals(count($locationList), 1);
+    //     $this->assertEquals($locationList['local']->locationKey, 'local');
 });

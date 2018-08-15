@@ -15,6 +15,12 @@ test("selectTemplateList", async t => {
         }
         if (err) throw err;
     }
+
+    //     $templateState = GameyeMock::mockTemplate();
+    //     $templateList = GameyeSelector::selectTemplateList($templateState);
+    //     $this->assertEquals(count($templateList), 2);
+    //     $this->assertEquals($templateList['t1']->templateKey, 't1');
+    //     $this->assertEquals($templateList['t2']->templateKey, 't2');
 });
 
 test("selectTemplateItem", async t => {
@@ -29,4 +35,8 @@ test("selectTemplateItem", async t => {
         }
         if (err) throw err;
     }
+
+    //     $templateState = GameyeMock::mockTemplate();
+    //     $templateItem = GameyeSelector::selectTemplateItem($templateState, 't2');
+    //     $this->assertEquals($templateItem->templateKey, 't2');
 });

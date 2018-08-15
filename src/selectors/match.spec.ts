@@ -15,6 +15,11 @@ test("selectMatchList", async t => {
         }
         if (err) throw err;
     }
+    //     $matchState = GameyeMock::mockMatch();
+    //     $matchList = GameyeSelector::selectMatchList($matchState);
+    //     $this->assertEquals(count($matchList), 2);
+    //     $this->assertEquals($matchList['test-match-123']->matchKey, 'test-match-123');
+    //     $this->assertEquals($matchList['test-match-456']->matchKey, 'test-match-456');
 });
 
 test("selectMatchListForGame", async t => {
@@ -29,6 +34,10 @@ test("selectMatchListForGame", async t => {
         }
         if (err) throw err;
     }
+    //     $matchState = GameyeMock::mockMatch();
+    //     $matchList = GameyeSelector::selectMatchListForGame($matchState, 'test');
+    //     $this->assertEquals(count($matchList), 1);
+    //     $this->assertEquals($matchList['test-match-123']->gameKey, 'test');
 });
 
 test("selectMatchItem", async t => {
@@ -43,4 +52,7 @@ test("selectMatchItem", async t => {
         }
         if (err) throw err;
     }
+    //     $matchState = GameyeMock::mockMatch();
+    //     $matchItem = GameyeSelector::selectMatchItem($matchState, 'test-match-123');
+    //     $this->assertEquals($matchItem->matchKey, 'test-match-123');
 });

@@ -15,6 +15,13 @@ test("selectTeamList", async t => {
         }
         if (err) throw err;
     }
+    //     $statisticState = GameyeMock::mockStatistic();
+    //     $teamList = GameyeSelector::selectTeamList($statisticState);
+    //     $this->assertEquals(count($teamList), 2);
+    //     $this->assertEquals($teamList['1']->teamKey, '1');
+    //     $this->assertEquals($teamList['1']->name, 'TeamA');
+    //     $this->assertEquals($teamList['2']->teamKey, '2');
+    //     $this->assertEquals($teamList['2']->name, 'TeamB');
 });
 
 test("selectTeamItem", async t => {
@@ -29,4 +36,8 @@ test("selectTeamItem", async t => {
         }
         if (err) throw err;
     }
+    //     $statisticState = GameyeMock::mockStatistic();
+    //     $teamItem = GameyeSelector::selectTeamItem($statisticState, '2');
+    //     $this->assertEquals($teamItem->teamKey, '2');
+    //     $this->assertEquals($teamItem->name, 'TeamB');
 });

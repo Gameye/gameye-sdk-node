@@ -7,12 +7,10 @@ export interface QueryPatch {
     value: any;
 }
 
-const closed = Symbol();
-
 export class QuerySubscription<TState extends object> implements Destructable {
+    private destructedPromise!: Promise<boolean>;
     private lastState: TState | undefined;
     private readBuffer = "";
-    private closePromise!: Promise<typeof closed>;
 
     constructor(private reader: stream.Readable) {
         this.initializeReader();
@@ -24,19 +22,23 @@ export class QuerySubscription<TState extends object> implements Destructable {
 
     public async nextState() {
         const { lastState } = this;
-        const { patches, more } = await this.nextPatches();
-        const state = transform<TState>(
+        const patches = await this.nextPatches();
+        if (patches === false) return false;
+
+        const nextState = transform<TState>(
             lastState || {} as any,
             ({ set }) => patches.forEach(({ path, value }) => set(path, value)),
         );
-        return { state, more };
+        this.lastState = nextState;
+        return nextState;
     }
 
     private async nextPatches() {
-        const { line, more } = await this.nextLine();
+        const line = await this.nextLine();
+        if (line === false) return false;
 
         const patches: QueryPatch[] = line ? JSON.parse(line) : [];
-        return { patches, more };
+        return patches;
     }
 
     private initializeReader() {
@@ -44,8 +46,9 @@ export class QuerySubscription<TState extends object> implements Destructable {
         reader.on("data", chunk => {
             this.readBuffer += chunk;
         });
-        this.closePromise = new Promise(resolve => reader.once("close", () => resolve(closed)));
-        reader.resume();
+        this.destructedPromise = new Promise(
+            resolve => reader.once("close", () => resolve(false)),
+        );
     }
 
     private async nextLine() {
@@ -55,16 +58,15 @@ export class QuerySubscription<TState extends object> implements Destructable {
             if (newlineIndex >= 0) {
                 this.readBuffer = readBuffer.substring(newlineIndex + "\n".length);
                 const line = readBuffer.substring(0, newlineIndex);
-
-                return { line, more: true };
+                return line;
             }
 
             const result = await Promise.race([
-                this.closePromise,
+                this.destructedPromise,
                 await new Promise(resolve => this.reader.once("data", resolve)),
             ]);
 
-            if (result === closed) return { line: "", more: false };
+            if (result === false) return false;
         }
     }
 

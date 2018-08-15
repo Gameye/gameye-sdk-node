@@ -109,11 +109,7 @@ export class GameyeClient {
                     headers: { accept: "application/x-ndjson" },
                 }).
                     on("error", reject).
-                    on("response", resolve).
-                    on("data", chunk => {
-                        // tslint:disable-next-line:no-debugger
-                        debugger;
-                    }),
+                    on("response", resolve),
         );
         if (response.statusCode !== 200) {
             throw new errors.UnexpectedResponseStatusError(

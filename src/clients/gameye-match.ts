@@ -1,23 +1,49 @@
-import * as errors from "../errors";
+import * as models from "../models";
 import { GameyeClient } from "./gameye";
 
+export interface StartMatchPayload {
+    matchKey: string;
+    gameKey: string;
+    locationKeys: string[];
+    templateKey: string;
+    config: {
+        [name: string]: string | number | boolean;
+    };
+}
 export function commandStartMatch(
     this: GameyeClient,
-    $payload: any,
+    matchKey: string,
+    gameKey: string,
+    locationKeys: string[],
+    templateKey: string,
+    config: {
+        [name: string]: string | number | boolean;
+    },
 ) {
-    throw new errors.NotImplemented();
+    return this.command<StartMatchPayload>("start-match", {
+        matchKey,
+        gameKey,
+        locationKeys,
+        templateKey,
+        config,
+    });
 }
 
+export interface StopMatchPayload {
+    matchKey: string;
+}
 export function commandStopMatch(
     this: GameyeClient,
-    $payload: any,
+    matchKey: string,
 ) {
-    throw new errors.NotImplemented();
+    return this.command<StopMatchPayload>("stop-match", {
+        matchKey,
+    });
 }
 
 export function queryMatch(
     this: GameyeClient,
     subscribe = false,
 ) {
-    throw new errors.NotImplemented();
+    return this.query<models.MatchQueryState>("match", {}, subscribe);
 }

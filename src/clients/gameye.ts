@@ -44,6 +44,21 @@ export class GameyeClient {
         this.validateConfig();
     }
 
+    public async command<TPayload extends object>(
+        type: string,
+        payload: TPayload,
+    ): Promise<void> {
+        throw new errors.NotImplemented();
+    }
+
+    public async query<TState extends object, TArgs extends object = {}>(
+        type: string,
+        payload: TArgs,
+        subscribe: boolean,
+    ): Promise<TState> {
+        throw new errors.NotImplemented();
+    }
+
     private validateConfig() {
         const { config } = this;
 
@@ -52,17 +67,6 @@ export class GameyeClient {
             const value = config[field];
             if (isEmpty(value)) throw new errors.MissingConfigurationField(field);
         }
-    }
-
-    private command<TPayload extends object>(
-        type: string,
-        payload: TPayload,
-    ) {
-        throw new errors.NotImplemented();
-    }
-
-    private query() {
-        throw new errors.NotImplemented();
     }
 
 }

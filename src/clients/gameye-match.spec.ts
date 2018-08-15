@@ -8,7 +8,13 @@ test("GameyeClient commandStartMatch", async t => {
         endpoint: "http://localhost",
     });
     try {
-        client.commandStartMatch({});
+        client.commandStartMatch(
+            "match",
+            "game",
+            ["location"],
+            "template",
+            {},
+        );
         t.fail();
     }
     catch (err) {
@@ -26,7 +32,9 @@ test("GameyeClient commandStopMatch", async t => {
         endpoint: "http://localhost",
     });
     try {
-        client.commandStopMatch({});
+        client.commandStopMatch(
+            "match",
+        );
         t.fail();
     }
     catch (err) {

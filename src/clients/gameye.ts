@@ -1,3 +1,4 @@
+import * as fetch from "isomorphic-fetch";
 import * as errors from "../errors";
 import { isEmpty } from "../utils";
 import { queryGame } from "./gameye-game";
@@ -48,15 +49,50 @@ export class GameyeClient {
         type: string,
         payload: TPayload,
     ): Promise<void> {
-        throw new errors.NotImplemented();
+        const { endpoint, token } = this.config;
+        const url = `${endpoint}/action/${type}`;
+        const headers = {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
+        };
+
+        const response = await fetch(url, {
+            headers,
+            body: JSON.stringify(payload),
+        });
+        if (response.status !== 202) {
+            throw new errors.UnexpectedResponseStatusError(
+                202,
+                response.status,
+            );
+        }
     }
 
     public async query<TState extends object, TArgs extends object = {}>(
         type: string,
         payload: TArgs,
-        subscribe: boolean,
+        subscribe: boolean = false,
     ): Promise<TState> {
-        throw new errors.NotImplemented();
+        const { endpoint, token } = this.config;
+        const url = `${endpoint}/fetch/${type}`;
+        const headers = {
+            Accept: "application/json",
+            Authorization: `Bearer ${token}`,
+        };
+
+        const response = await fetch(url, {
+            headers,
+            body: JSON.stringify(payload),
+        });
+        if (response.status !== 200) {
+            throw new errors.UnexpectedResponseStatusError(
+                200,
+                response.status,
+            );
+        }
+
+        const state: TState = await response.json();
+        return state;
     }
 
     private validateConfig() {

@@ -2,10 +2,10 @@ import * as request from "request";
 import { QuerySubscription } from ".";
 import * as errors from "../errors";
 import { isEmpty } from "../utils";
-import { queryGame } from "./gameye-game";
-import { commandStartMatch, commandStopMatch, queryMatch } from "./gameye-match";
-import { queryStatistic } from "./gameye-statistic";
-import { queryTemplate } from "./gameye-template";
+import { queryGame, subscribeGame } from "./gameye-game";
+import { commandStartMatch, commandStopMatch, queryMatch, subscribeMatch } from "./gameye-match";
+import { queryStatistic, subscribeStatistic } from "./gameye-statistic";
+import { queryTemplate, subscribeTemplate } from "./gameye-template";
 
 export interface GameyeClientConfig {
     endpoint: string;
@@ -19,19 +19,28 @@ export class GameyeClient {
         token: process.env.GAMEYE_API_TOKEN || "",
     });
 
-    // #region Commands
+    // #region commands
 
     public commandStartMatch = commandStartMatch;
     public commandStopMatch = commandStopMatch;
 
     // #endregion
 
-    // #region Queries
+    // #region queries
 
     public queryStatistic = queryStatistic;
     public queryTemplate = queryTemplate;
     public queryGame = queryGame;
     public queryMatch = queryMatch;
+
+    // #endregion
+
+    // #region subscribe
+
+    public subscribeStatistic = subscribeStatistic;
+    public subscribeTemplate = subscribeTemplate;
+    public subscribeGame = subscribeGame;
+    public subscribeMatch = subscribeMatch;
 
     // #endregion
 

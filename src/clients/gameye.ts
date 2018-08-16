@@ -12,6 +12,9 @@ export interface GameyeClientConfig {
     token: string;
 }
 
+/**
+ * Gameye client class for communicating with the Gameye API
+ */
 export class GameyeClient {
 
     public static defaultConfig = Object.freeze<GameyeClientConfig>({

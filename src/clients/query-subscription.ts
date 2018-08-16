@@ -2,11 +2,17 @@ import { transform } from "deepkit";
 import * as stream from "stream";
 import { Destructable } from "../utils";
 
+/**
+ * A patch that will update a state for a query
+ */
 export interface QueryPatch {
     path: PropertyKey[];
     value: any;
 }
 
+/**
+ * Subscription for a query
+ */
 export class QuerySubscription<TState extends object> implements Destructable {
     private destructedPromise!: Promise<boolean>;
     private lastState: TState | undefined;
@@ -16,10 +22,17 @@ export class QuerySubscription<TState extends object> implements Destructable {
         this.initializeReader();
     }
 
+    /**
+     * Unsubscribe from this subscription and cleanup resources
+     */
     public async destroy() {
         this.reader.destroy();
+        await this.destructedPromise;
     }
 
+    /**
+     * A promise that resolves to the next state as soon as it is available
+     */
     public async nextState() {
         const { lastState } = this;
         const patches = await this.nextPatches();

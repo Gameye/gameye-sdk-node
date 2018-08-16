@@ -4,6 +4,7 @@ export type TemplateItem = models.TemplateQueryArgItem;
 
 /**
  * Select a list of templates.
+ * @param templateState template state
  */
 export function selectTemplateList(
     templateState: models.TemplateQueryState,
@@ -16,6 +17,8 @@ export function selectTemplateList(
 /**
  * Get details about a single template from a template-state as returned by
  * the gameye api.
+ * @param templateState template state
+ * @param templateKey identifier of the template
  */
 export function selectTemplateItem(
     templateState: models.TemplateQueryState,

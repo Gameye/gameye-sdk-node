@@ -1,10 +1,14 @@
 import * as models from "../models";
 import { GameyeClient } from "./gameye";
 
-export interface StatisticQueryArg {
+interface StatisticQueryArg {
     matchKey: string;
 }
 
+/**
+ * Fetch statistic state
+ * @param matchKey identifier of the match
+ */
 export function queryStatistic(
     this: GameyeClient,
     matchKey: string,
@@ -14,6 +18,10 @@ export function queryStatistic(
     });
 }
 
+/**
+ * Subscribe to statistic state
+ * @param matchKey identifier of the match
+ */
 export function subscribeStatistic(
     this: GameyeClient,
     matchKey: string,

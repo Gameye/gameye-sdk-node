@@ -4,6 +4,7 @@ export type TeamItem = models.TeamModel;
 
 /**
  * Get a list of all teams in the statistic-state.
+ * @param statisticState statistic state
  */
 export function selectTeamList(
     statisticState: models.StatisticQueryState,
@@ -16,6 +17,8 @@ export function selectTeamList(
 
 /**
  * Get a single team from the statistic-state.
+ * @param statisticState statistic state
+ * @param teamKey identifier of the team
  */
 export function selectTeamItem(
     statisticState: models.StatisticQueryState,

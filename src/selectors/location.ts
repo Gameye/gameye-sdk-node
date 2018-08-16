@@ -4,6 +4,8 @@ export type LocationItem = models.GameQueryLocationItem;
 
 /**
  * Selects all locations for a given game.
+ * @param gameState game state
+ * @param gameKey identifier of the game
  */
 export function selectLocationListForGame(
     gameState: models.GameQueryState,

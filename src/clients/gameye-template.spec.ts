@@ -5,6 +5,6 @@ import { use } from "../utils";
 test(
     "GameyeClient queryTemplate",
     t => use(TestContext.create(), async ({ gameyeClient }) => {
-        await gameyeClient.queryTemplate();
+        await gameyeClient.queryTemplate("csgo");
     }),
 );

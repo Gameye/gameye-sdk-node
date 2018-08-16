@@ -4,6 +4,7 @@ export type MatchItem = models.MatchQueryMatchItem;
 
 /**
  * Select a list of active matches.
+ * @param matchState match state
  */
 export function selectMatchList(
     matchState: models.MatchQueryState,
@@ -15,6 +16,8 @@ export function selectMatchList(
 
 /**
  * Select a list of active matches for a game.
+ * @param matchState match state
+ * @param gameKey identifier of the game to select matches for
  */
 export function selectMatchListForGame(
     matchState: models.MatchQueryState,
@@ -29,6 +32,8 @@ export function selectMatchListForGame(
 /**
  * Get details about a single match from a match-state as returned by
  * the gameye api.
+ * @param matchState match state
+ * @param matchKey identifier of the match to get the details for
  */
 export function selectMatchItem(
     matchState: models.MatchQueryState,

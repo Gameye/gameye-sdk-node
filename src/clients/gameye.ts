@@ -89,13 +89,15 @@ export class GameyeClient {
         const { endpoint, token } = this.config;
         const url = `${endpoint}/fetch/${type}`;
         const response = await new Promise<request.Response>(
-            (resolve, reject) => request.get(url, {
-                qs: arg,
-                auth: { bearer: token },
-                headers: { accept: "application/json" },
-            }).
-                on("error", reject).
-                on("response", resolve),
+            (resolve, reject) => request.get(
+                url,
+                {
+                    qs: arg,
+                    auth: { bearer: token },
+                    headers: { accept: "application/json" },
+                },
+                (err, result) => err ? reject(err) : resolve(result),
+            ),
         );
         if (response.statusCode !== 200) {
             throw new errors.UnexpectedResponseStatusError(
@@ -104,7 +106,7 @@ export class GameyeClient {
             );
         }
 
-        const { body } = await response.toJSON();
+        const body = JSON.parse(response.body);
         return body;
     }
 

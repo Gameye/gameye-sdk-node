@@ -64,6 +64,7 @@ export class GameyeClient {
     ): Promise<void> {
         const { endpoint, token } = this.config;
         const url = `${endpoint}/action/${type}`;
+
         const response = await new Promise<request.Response>(
             (resolve, reject) => request.post(url, {
                 body: payload,
@@ -73,9 +74,9 @@ export class GameyeClient {
                 on("error", reject).
                 on("response", resolve),
         );
-        if (response.statusCode !== 202) {
+        if (response.statusCode !== 204) {
             throw new errors.UnexpectedResponseStatusError(
-                202,
+                204,
                 response.statusCode,
             );
         }

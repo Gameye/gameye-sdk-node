@@ -33,7 +33,7 @@ test(
                 method: "POST",
                 headers: { Authorization: "Bearer 123" },
             });
-            t.equal(response.status, 202);
+            t.equal(response.status, 204);
         }
 
     }),

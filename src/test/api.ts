@@ -87,7 +87,7 @@ export class ApiTestServer implements Destructable {
         });
 
         koaServer.use(route.post("/action/*", context => {
-            context.status = 202;
+            context.status = 204;
         }));
 
         koaServer.use(route.get("/fetch/*", async context => {

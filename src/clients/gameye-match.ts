@@ -6,6 +6,7 @@ interface StartMatchPayload {
     gameKey: string;
     locationKeys: string[];
     templateKey: string;
+    endCallbackUrl: string;
     config: {
         [name: string]: string | number | boolean;
     };
@@ -29,6 +30,7 @@ export function commandStartMatch(
     config: {
         [name: string]: string | number | boolean;
     },
+    endCallbackUrl: string
 ) {
     return this.command<StartMatchPayload>("start-match", {
         matchKey,
@@ -36,6 +38,7 @@ export function commandStartMatch(
         locationKeys,
         templateKey,
         config,
+        endCallbackUrl
     });
 }
 

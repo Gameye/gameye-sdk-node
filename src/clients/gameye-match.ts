@@ -6,10 +6,10 @@ interface StartMatchPayload {
     gameKey: string;
     locationKeys: string[];
     templateKey: string;
-    endCallbackUrl: string;
     config: {
         [name: string]: string | number | boolean;
     };
+    endCallbackUrl?: string;
 }
 /**
  * Start a match
@@ -20,6 +20,7 @@ interface StartMatchPayload {
  * available, the second one is tried and so on.
  * @param templateKey identifier of the template for this game to use
  * @param config configuration of the template
+ * @param endCallbackUrl url that gets called (via GET) after the match ended
  */
 export function commandStartMatch(
     this: GameyeClient,
@@ -30,7 +31,7 @@ export function commandStartMatch(
     config: {
         [name: string]: string | number | boolean;
     },
-    endCallbackUrl: string,
+    endCallbackUrl?: string,
 ) {
     return this.command<StartMatchPayload>("start-match", {
         matchKey,

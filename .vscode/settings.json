@@ -2,9 +2,18 @@
 {
     "typescript.tsdk": "node_modules/typescript/lib",
     "editor.formatOnSave": true,
-    "tslint.autoFixOnSave": true,
     "editor.rulers": [
         80,
         120
-    ]
+    ],
+    "editor.tabSize": 4,
+    "editor.insertSpaces": true,
+    "[typescript]": {
+        "editor.detectIndentation": false
+    },
+    "[javascript]": {
+        "editor.detectIndentation": false
+    },
+    "javascript.preferences.quoteStyle": "double",
+    "typescript.preferences.quoteStyle": "double",
 }

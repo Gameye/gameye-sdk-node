@@ -100,7 +100,7 @@ export class GameyeClient {
         arg: any,
     ): Promise<TState> {
         const { endpoint, token } = this.config;
-        const url = new URL(`${endpoint}/query/${type}`);
+        const url = new URL(`${endpoint}/fetch/${type}`);
         url.search = querystring.stringify(arg);
 
         const requestStream = streams.createRequestStream(
@@ -136,7 +136,7 @@ export class GameyeClient {
         arg: any,
     ): Promise<Readable> {
         const { endpoint, token } = this.config;
-        const url = new URL(`${endpoint}/query/${type}`);
+        const url = new URL(`${endpoint}/fetch/${type}`);
         url.search = querystring.stringify(arg);
 
         const requestStream = streams.createRequestStream(

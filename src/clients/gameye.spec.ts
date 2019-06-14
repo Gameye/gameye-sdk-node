@@ -1,7 +1,7 @@
 import * as test from "blue-tape";
 import * as errors from "../errors";
 import { TestContext } from "../test";
-import { use } from "../utils";
+import { streamWait, use, whenFinished } from "../utils";
 import { GameyeClient } from "./gameye";
 
 test("GameyeClient instantiation", async t => {
@@ -50,7 +50,7 @@ test(
             { path: ["number"], value: 1 },
         ]);
         {
-            const state = await subscription.nextState();
+            const state = await streamWait(subscription);
             t.deepEqual(state, { number: 1 });
         }
 
@@ -58,7 +58,7 @@ test(
             { path: ["number"], value: 2 },
         ]);
         {
-            const state = await subscription.nextState();
+            const state = await streamWait(subscription);
             t.deepEqual(state, { number: 2 });
         }
 
@@ -66,10 +66,11 @@ test(
             { path: ["character"], value: "a" },
         ]);
         {
-            const state = await subscription.nextState();
+            const state = await streamWait(subscription);
             t.deepEqual(state, { number: 2, character: "a" });
         }
 
-        await subscription.destroy();
+        subscription.destroy();
+        await whenFinished(subscription);
     }),
 );

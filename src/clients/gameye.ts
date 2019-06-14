@@ -9,10 +9,6 @@ import { commandStartMatch, commandStopMatch, queryMatch, subscribeMatch } from 
 import { queryStatistic, subscribeStatistic } from "./gameye-statistic";
 import { queryTemplate, subscribeTemplate } from "./gameye-template";
 
-interface Args {
-    [name: string]: string | number;
-}
-
 export interface GameyeClientConfig {
     endpoint: string;
     token: string;
@@ -99,12 +95,12 @@ export class GameyeClient {
         }
     }
 
-    public async query<TState extends object, TArgs extends Args = {}>(
+    public async query<TState extends object>(
         type: string,
-        arg: TArgs,
+        arg: any,
     ): Promise<TState> {
         const { endpoint, token } = this.config;
-        const url = new URL(`${endpoint}/action/${type}`);
+        const url = new URL(`${endpoint}/query/${type}`);
         url.search = querystring.stringify(arg);
 
         const requestStream = streams.createRequestStream(
@@ -135,12 +131,12 @@ export class GameyeClient {
         }
     }
 
-    public async subscribe<TState extends object, TArgs extends Args = {}>(
+    public async subscribe(
         type: string,
-        arg: TArgs,
+        arg: any,
     ): Promise<Readable> {
         const { endpoint, token } = this.config;
-        const url = new URL(`${endpoint}/action/${type}`);
+        const url = new URL(`${endpoint}/query/${type}`);
         url.search = querystring.stringify(arg);
 
         const requestStream = streams.createRequestStream(

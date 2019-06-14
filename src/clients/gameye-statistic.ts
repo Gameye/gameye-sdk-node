@@ -13,7 +13,7 @@ export function queryStatistic(
     this: GameyeClient,
     matchKey: string,
 ) {
-    return this.query<models.StatisticQueryState, StatisticQueryArg>("statistic", {
+    return this.query<models.StatisticQueryState>("statistic", {
         matchKey,
     });
 }
@@ -26,7 +26,7 @@ export function subscribeStatistic(
     this: GameyeClient,
     matchKey: string,
 ) {
-    return this.subscribe<models.StatisticQueryState, StatisticQueryArg>("statistic", {
+    return this.subscribe("statistic", {
         matchKey,
     });
 }

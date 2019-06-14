@@ -16,5 +16,5 @@ export function queryGame(
 export function subscribeGame(
     this: GameyeClient,
 ) {
-    return this.subscribe<models.GameQueryState>("game", {});
+    return this.subscribe("game", {});
 }

@@ -74,5 +74,5 @@ export function queryMatch(
 export function subscribeMatch(
     this: GameyeClient,
 ) {
-    return this.subscribe<models.MatchQueryState>("match", {});
+    return this.subscribe("match", {});
 }

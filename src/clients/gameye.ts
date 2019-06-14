@@ -110,7 +110,7 @@ export class GameyeClient {
                 accept: "application/json",
                 authorization: `Bearer ${token}`,
             },
-            10 * second,
+            30 * second,
         );
 
         await writeAll(requestStream);
@@ -146,7 +146,7 @@ export class GameyeClient {
                 accept: "application/x-ndjson",
                 authorization: `Bearer ${token}`,
             },
-            10 * second,
+            30 * second,
         );
 
         await writeAll(requestStream);
@@ -159,6 +159,7 @@ export class GameyeClient {
                 const reduce = new streams.ReduceTransform(reducePatch, {});
                 const pass = new PassThrough({
                     objectMode: true,
+                    autoDestroy: true,
                 });
 
                 pipeline(

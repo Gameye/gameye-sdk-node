@@ -14,20 +14,6 @@ test("GameyeClient instantiation", async t => {
 test("GameyeClient config errors", async t => {
     try {
         const client = new GameyeClient({
-            token: "123",
-        });
-        t.fail();
-    }
-    catch (err) {
-        if (err instanceof errors.MissingConfigurationField) {
-            t.equal(err.fieldName, "endpoint");
-            err = null;
-        }
-        if (err) throw err;
-    }
-
-    try {
-        const client = new GameyeClient({
             endpoint: "http://localhost",
         });
         t.fail();

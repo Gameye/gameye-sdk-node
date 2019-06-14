@@ -18,6 +18,7 @@ async function main() {
     let match: models.MatchQueryMatchItem | null = null;
 
     console.log(`starting match ${matchKey}`);
+    console.log(`---`);
 
     await gameyeClient.commandStartMatch(
         matchKey,
@@ -38,9 +39,8 @@ async function main() {
     const statisticSubscription = await gameyeClient.subscribeStatistic(matchKey);
     statisticSubscription.on("data", (state: models.StatisticQueryState) => {
         const round = selectors.getRound(state);
-        console.log(
-            `Round: ${round}`,
-        );
+        console.log(`Round: ${round}`);
+        console.log(`---`);
 
         const players = selectors.selectPlayerList(state);
         for (const player of players) {
@@ -48,9 +48,7 @@ async function main() {
                 `${player.name} has ${player.statistic.kill} kills and ${player.statistic.death} deaths`,
             );
         }
-        console.log(
-            `---`,
-        );
+        console.log(`---`);
     });
 
     /*
@@ -63,6 +61,7 @@ async function main() {
     }
 
     console.log(`match ${matchKey} finished`);
+    console.log(`---`);
 
     matchSubscription.destroy();
     await whenFinished(matchSubscription);

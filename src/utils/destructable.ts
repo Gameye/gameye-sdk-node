@@ -1,4 +1,4 @@
-export type Destructor = (err?: any) => void | PromiseLike<void>;
+export type Destructor = () => void | PromiseLike<void>;
 
 export interface Destructable {
     destroy: Destructor;

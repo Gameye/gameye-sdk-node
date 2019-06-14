@@ -15,6 +15,25 @@ npm install @gameye/sdk
 
 Typescript type declarations are automatically installed.
 
+## Example!
+Watch bots kill eachother and get aquinted qith our sdk and real-time statistics.
+
+First, get an API key!
+Then checkout this repo on your computer.
+Install all dependencies with
+```
+npm install
+```
+Then, export your api key as an environment variable, like this
+```
+export GAMEYE_API_TOKEN=mysupersecretkey
+```
+And now, run
+```
+node ./node/examples/bots
+```
+to see bots kill eachother!
+
 
 ## Contributing
 We encourage everyone to help us improve our public packages. If you want to

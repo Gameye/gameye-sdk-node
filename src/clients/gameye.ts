@@ -20,7 +20,7 @@ export interface GameyeClientConfig {
 export class GameyeClient {
 
     public static defaultConfig = Object.freeze<GameyeClientConfig>({
-        endpoint: process.env.GAMEYE_API_ENDPOINT || "",
+        endpoint: process.env.GAMEYE_API_ENDPOINT || "https://api.gameye.com",
         token: process.env.GAMEYE_API_TOKEN || "",
     });
 

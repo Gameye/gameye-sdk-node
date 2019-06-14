@@ -42,6 +42,7 @@
   "dependencies": {
     "@types/http-errors": "^1.6.1",
     "@types/isomorphic-fetch": "0.0.34",
+    "@types/uuid": "^3.4.4",
     "deepkit": "^0.1.1",
     "http-errors": "^1.7.2",
     "isomorphic-fetch": "^2.2.1",

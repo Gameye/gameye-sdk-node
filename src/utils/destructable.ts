@@ -1,23 +1,21 @@
-export type Destructor = (err?: any) => void | PromiseLike<void>;
+export type Destructor = () => void | PromiseLike<void>;
 
 export interface Destructable {
     destroy: Destructor;
 }
 
-export type Usable<TDisposable extends Destructable> = TDisposable | PromiseLike<TDisposable>;
+export type Usable<TDestructable extends Destructable> = TDestructable | PromiseLike<TDestructable>;
 
-export async function use<TResult, TDisposable extends Destructable>(
-    usable: Usable<TDisposable>,
-    job: (destructable: TDisposable) => TResult,
+export async function use<TResult, TDestructable extends Destructable>(
+    usable: Usable<TDestructable>,
+    job: (destructable: TDestructable) => TResult,
 ): Promise<TResult> {
-    const disposable = await usable;
+    const destructable = await usable;
     try {
-        const result = await job(disposable);
-        await disposable.destroy();
+        const result = await job(destructable);
         return result;
     }
-    catch (err) {
-        await disposable.destroy(err);
-        throw err;
+    finally {
+        await destructable.destroy();
     }
 }

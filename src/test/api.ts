@@ -3,15 +3,14 @@ import * as Koa from "koa";
 import * as route from "koa-route";
 import * as net from "net";
 import * as stream from "stream";
-import { QueryPatch } from "../clients";
-import { Destructable } from "../utils";
+import { Destructable, StatePatch } from "../utils";
 
 export interface ApiTestServerConfig {
     token: string;
     keepAliveInterval: number;
 }
 
-type PatchListener = (patches: QueryPatch[]) => void;
+type PatchListener = (patches: StatePatch[]) => void;
 
 export class ApiTestServer implements Destructable {
     public static defaultConfig = Object.freeze<ApiTestServerConfig>({
@@ -49,7 +48,7 @@ export class ApiTestServer implements Destructable {
         return `http://localhost:${address.port}`;
     }
 
-    public emitPatches(patches: QueryPatch[]) {
+    public emitPatches(patches: StatePatch[]) {
         const { patchListenerPool } = this;
         patchListenerPool.forEach(listener => listener(patches));
     }
@@ -106,7 +105,7 @@ export class ApiTestServer implements Destructable {
                     context.status = 200;
                     context.flushHeaders();
 
-                    const patchListener = (patches: QueryPatch[]) => {
+                    const patchListener = (patches: StatePatch[]) => {
                         res.write(JSON.stringify(patches));
                         res.write("\n");
                     };

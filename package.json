@@ -46,6 +46,7 @@
     "deepkit": "^0.1.1",
     "http-errors": "^1.7.2",
     "isomorphic-fetch": "^2.2.1",
+    "msecs": "^1.0.0",
     "request": "^2.88.0",
     "tslib": "^1.9.3"
   },

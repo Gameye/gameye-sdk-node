@@ -30,7 +30,7 @@ export function commandStartMatch(
     config: {
         [name: string]: string | number | boolean;
     },
-    endCallbackUrl: string
+    endCallbackUrl: string,
 ) {
     return this.command<StartMatchPayload>("start-match", {
         matchKey,
@@ -38,7 +38,7 @@ export function commandStartMatch(
         locationKeys,
         templateKey,
         config,
-        endCallbackUrl
+        endCallbackUrl,
     });
 }
 

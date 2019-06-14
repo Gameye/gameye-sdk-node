@@ -11,7 +11,7 @@ test(
             ["location"],
             "template",
             {},
-            "http://localhost/callback"
+            "http://localhost/callback",
         );
     }),
 );

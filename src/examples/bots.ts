@@ -17,6 +17,8 @@ async function main() {
     const matchKey = uuid();
     let match: models.MatchQueryMatchItem | null = null;
 
+    console.log(`starting match ${matchKey}`);
+
     await gameyeClient.commandStartMatch(
         matchKey,
         "csgo-dem",
@@ -60,6 +62,11 @@ async function main() {
         match = selectors.selectMatchItem(state, matchKey);
     }
 
+    console.log(`match ${matchKey} finished`);
+
     matchSubscription.destroy();
     await whenFinished(matchSubscription);
+
+    statisticSubscription.destroy();
+    await whenFinished(statisticSubscription);
 }

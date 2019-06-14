@@ -1,11 +1,17 @@
-import * as request from "request";
-import { QuerySubscription } from ".";
+import { second } from "msecs";
+import * as querystring from "querystring";
+import { PassThrough, pipeline, Readable } from "stream";
 import * as errors from "../errors";
-import { isEmpty } from "../utils";
+import * as streams from "../streams";
+import { isEmpty, reducePatch, writeAll } from "../utils";
 import { queryGame, subscribeGame } from "./gameye-game";
 import { commandStartMatch, commandStopMatch, queryMatch, subscribeMatch } from "./gameye-match";
 import { queryStatistic, subscribeStatistic } from "./gameye-statistic";
 import { queryTemplate, subscribeTemplate } from "./gameye-template";
+
+interface Args {
+    [name: string]: string | number;
+}
 
 export interface GameyeClientConfig {
     endpoint: string;
@@ -63,78 +69,129 @@ export class GameyeClient {
         payload: TPayload,
     ): Promise<void> {
         const { endpoint, token } = this.config;
-        const url = `${endpoint}/action/${type}`;
+        const url = new URL(`${endpoint}/action/${type}`);
 
-        const response = await new Promise<request.Response>(
-            (resolve, reject) => request.post(url, {
-                body: payload,
-                json: true,
-                auth: { bearer: token },
-            }).
-                on("error", reject).
-                on("response", resolve),
+        const requestStream = streams.createRequestStream(
+            "POST",
+            url,
+            {
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            10 * second,
         );
-        if (response.statusCode !== 204) {
-            throw new errors.UnexpectedResponseStatusError(
-                204,
-                response.statusCode,
-            );
+
+        await writeAll(requestStream, JSON.stringify(payload));
+
+        try {
+            const responseStream = await streams.getResponse(requestStream);
+            try {
+                const result = await streams.readResponse(responseStream);
+                return result;
+            }
+            finally {
+                responseStream.destroy();
+            }
+        }
+        finally {
+            requestStream.abort();
+            requestStream.destroy();
         }
     }
 
-    public async query<TState extends object, TArgs extends object = {}>(
+    public async query<TState extends object, TArgs extends Args = {}>(
         type: string,
         arg: TArgs,
     ): Promise<TState> {
         const { endpoint, token } = this.config;
-        const url = `${endpoint}/fetch/${type}`;
-        const response = await new Promise<request.Response>(
-            (resolve, reject) => request.get(
-                url,
-                {
-                    qs: arg,
-                    auth: { bearer: token },
-                    headers: { accept: "application/json" },
-                },
-                (err, result) => err ? reject(err) : resolve(result),
-            ),
-        );
-        if (response.statusCode !== 200) {
-            throw new errors.UnexpectedResponseStatusError(
-                200,
-                response.statusCode,
-            );
-        }
+        const url = new URL(`${endpoint}/action/${type}`);
+        url.search = querystring.stringify(arg);
 
-        const body = JSON.parse(response.body);
-        return body;
+        const requestStream = streams.createRequestStream(
+            "GET",
+            url,
+            {
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            10 * second,
+        );
+
+        await writeAll(requestStream);
+
+        try {
+            const responseStream = await streams.getResponse(requestStream);
+            try {
+                const result = await streams.readResponse(responseStream);
+                return result;
+            }
+            finally {
+                responseStream.destroy();
+            }
+        }
+        finally {
+            requestStream.abort();
+            requestStream.destroy();
+        }
     }
 
-    public async subscribe<TState extends object, TArgs extends object = {}>(
+    public async subscribe<TState extends object, TArgs extends Args = {}>(
         type: string,
         arg: TArgs,
-    ): Promise<QuerySubscription<TState>> {
+    ): Promise<Readable> {
         const { endpoint, token } = this.config;
-        const url = `${endpoint}/fetch/${type}`;
-        const response = await new Promise<request.Response>(
-            (resolve, reject) =>
-                request.get(url, {
-                    qs: arg,
-                    auth: { bearer: token },
-                    headers: { accept: "application/x-ndjson" },
-                }).
-                    on("error", reject).
-                    on("response", resolve),
+        const url = new URL(`${endpoint}/action/${type}`);
+        url.search = querystring.stringify(arg);
+
+        const requestStream = streams.createRequestStream(
+            "GET",
+            url,
+            {
+                "Content-type": "application/json",
+                "Authorization": `Bearer ${token}`,
+            },
+            10 * second,
         );
-        if (response.statusCode !== 200) {
-            throw new errors.UnexpectedResponseStatusError(
-                200,
-                response.statusCode,
-            );
+
+        await writeAll(requestStream);
+
+        try {
+            const responseStream = await streams.getResponse(requestStream);
+            try {
+                const split = new streams.SplitTransform();
+                const fromJson = new streams.FromJSONTransform();
+                const reduce = new streams.ReduceTransform(reducePatch, {});
+                const pass = new PassThrough({
+                    objectMode: true,
+                });
+
+                pipeline(
+                    responseStream,
+                    split,
+                    fromJson,
+                    reduce,
+                    pass,
+                    error => {
+                        requestStream.abort();
+                        requestStream.destroy();
+                        pass.push(null);
+                        pass.destroy(error || undefined);
+                    },
+                );
+
+                return pass;
+            }
+            catch (error) {
+                responseStream.destroy();
+                throw error;
+            }
+        }
+        catch (error) {
+            requestStream.abort();
+            requestStream.destroy();
+            throw error;
         }
 
-        const subscription = new QuerySubscription<TState>(response);
-        return subscription;
     }
 
     private validateConfig() {

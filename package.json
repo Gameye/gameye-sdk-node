@@ -1,6 +1,6 @@
 {
   "name": "@gameye/sdk",
-  "version": "0.0.1-7",
+  "version": "0.0.2-0",
   "description": "Node.js SDK for Gameye",
   "main": "./node/main.js",
   "module": "./module/main.js",

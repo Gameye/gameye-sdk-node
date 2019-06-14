@@ -44,6 +44,7 @@ export class ApiTestServer implements Destructable {
 
     public getEndpoint() {
         const address = this.httpServer.address();
+        if (!address) throw new Error("no address!");
         if (typeof address === "string") return address;
         return `http://localhost:${address.port}`;
     }
@@ -147,10 +148,9 @@ export class ApiTestServer implements Destructable {
     private async initialize() {
         const { httpServer } = this;
 
-        await new Promise((resolve, reject) => httpServer.listen({ port: 0 }, (err: any) => {
-            if (err) return reject();
-            else resolve();
-        }));
+        await new Promise(
+            resolve => httpServer.listen({ port: 0 }, resolve),
+        );
     }
 
 }

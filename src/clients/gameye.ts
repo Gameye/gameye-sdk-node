@@ -71,8 +71,8 @@ export class GameyeClient {
             "POST",
             url,
             {
-                "Content-type": "application/json",
-                "Authorization": `Bearer ${token}`,
+                "content-type": "application/json",
+                "authorization": `Bearer ${token}`,
             },
             10 * second,
         );
@@ -107,8 +107,8 @@ export class GameyeClient {
             "GET",
             url,
             {
-                "Content-type": "application/json",
-                "Authorization": `Bearer ${token}`,
+                accept: "application/json",
+                authorization: `Bearer ${token}`,
             },
             10 * second,
         );
@@ -143,8 +143,8 @@ export class GameyeClient {
             "GET",
             url,
             {
-                "Content-type": "application/json",
-                "Authorization": `Bearer ${token}`,
+                accept: "application/x-ndjson",
+                authorization: `Bearer ${token}`,
             },
             10 * second,
         );

@@ -13,7 +13,7 @@ export function queryTemplate(
     this: GameyeClient,
     gameKey: string,
 ) {
-    return this.query<models.TemplateQueryState, TemplateQueryArg>("template", { gameKey });
+    return this.query<models.TemplateQueryState>("template", { gameKey });
 }
 
 /**
@@ -24,5 +24,5 @@ export function subscribeTemplate(
     this: GameyeClient,
     gameKey: string,
 ) {
-    return this.subscribe<models.TemplateQueryState, TemplateQueryArg>("template", { gameKey });
+    return this.subscribe("template", { gameKey });
 }

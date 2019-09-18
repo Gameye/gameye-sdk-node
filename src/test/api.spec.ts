@@ -22,14 +22,14 @@ test(
         }
 
         {
-            const response = await fetch(endpoint + "/fetch/type", {
+            const response = await fetch(endpoint + "/query/type", {
                 headers: { Authorization: "Bearer 123" },
             });
             t.equal(response.status, 200);
         }
 
         {
-            const response = await fetch(endpoint + "/action/type", {
+            const response = await fetch(endpoint + "/command/type", {
                 method: "POST",
                 headers: { Authorization: "Bearer 123" },
             });

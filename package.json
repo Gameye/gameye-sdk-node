@@ -35,13 +35,13 @@
     "koa-route": "^3.2.0",
     "nyc": "^14.1.1",
     "tape": "^4.11.0",
-    "ts-node": "^7.0.1",
+    "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
     "typescript": "^3.6.3"
   },
   "dependencies": {
     "@types/http-errors": "^1.6.2",
-    "@types/isomorphic-fetch": "0.0.34",
+    "@types/isomorphic-fetch": "0.0.35",
     "@types/uuid": "^3.4.5",
     "deepkit": "^0.1.1",
     "http-errors": "^1.7.3",

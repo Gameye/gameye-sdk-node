@@ -4,10 +4,8 @@ import { PassThrough, pipeline, Readable } from "stream";
 import * as errors from "../errors";
 import * as streams from "../streams";
 import { isEmpty, reducePatch, writeAll } from "../utils";
-import { queryGame, subscribeGame } from "./gameye-game";
 import { commandStartMatch, commandStopMatch, queryMatch, subscribeMatch } from "./gameye-match";
 import { queryStatistic, subscribeStatistic } from "./gameye-statistic";
-import { queryTemplate, subscribeTemplate } from "./gameye-template";
 
 export interface GameyeClientConfig {
     endpoint: string;
@@ -34,8 +32,6 @@ export class GameyeClient {
     // #region queries
 
     public queryStatistic = queryStatistic;
-    public queryTemplate = queryTemplate;
-    public queryGame = queryGame;
     public queryMatch = queryMatch;
 
     // #endregion
@@ -43,8 +39,6 @@ export class GameyeClient {
     // #region subscribe
 
     public subscribeStatistic = subscribeStatistic;
-    public subscribeTemplate = subscribeTemplate;
-    public subscribeGame = subscribeGame;
     public subscribeMatch = subscribeMatch;
 
     // #endregion

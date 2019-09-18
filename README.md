@@ -1,9 +1,9 @@
 # Gameye SDK for Node.js
 
-Create eSport and competitive matches for Counter-Strike: Global Offensive, Team Fortress 2, Left 4 Dead 2, Killing Floor 2, Insurgency and Day of Infamy for your platform without fixed monthly costs or any need for your own server infrastructure. Simply implement the Gameye API to kick off online matches when you need the, - you will even be able to implement the scores/statistics directly on your website. How cool is that!
+Create eSport and competitive matches for Counter-Strike: Global Offensive, Team Fortress 2, Left 4 Dead 2, Killing Floor 2, Insurgency and Day of Infamy for your platform without fixed monthly costs or any need for your own server infrastructure. Simply implement the Gameye API to kick off online matches when you need them; you will even be able to implement the scores/statistics directly on your website. How cool is that!
 
 ## Node version
-You neede node.js v10 or higher to use this library.
+You need node.js v10 or higher to use this library.
 
 ## Installation
 You need an API key to use this SDK, to obtain a free Gameye API key, please send us [an email](mailto:support@gameye.com)
@@ -16,7 +16,7 @@ npm install @gameye/sdk
 Typescript type declarations are automatically installed.
 
 ## Example!
-Watch bots kill eachother and get aquinted qith our sdk and real-time statistics.
+Watch bots kill each other and get acquainted with our sdk and real-time statistics.
 
 First, get an API key!
 Then checkout this repo on your computer.
@@ -32,7 +32,7 @@ And now, run
 ```
 node ./node/examples/bots
 ```
-to see bots kill eachother!
+to see bots kill each other!
 
 
 ## Contributing
@@ -47,7 +47,7 @@ like this:
 ln test.sh .git/hooks/pre-commit
 ```
 
-Now, just before every comit, your code will be compiled and linted!
+Now, just before every commit, your code will be compiled and linted!
 
 
 ## License

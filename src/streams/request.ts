@@ -63,8 +63,8 @@ export async function readResponse(
     response: http.IncomingMessage,
 ) {
     const { headers } = response;
-
-    switch (headers["content-type"]) {
+    const [contentType] = (headers["content-type"] || "").split(";");
+    switch (contentType) {
         case "application/json": {
             const data = await readAll(response);
             const result = JSON.parse(data);

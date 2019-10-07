@@ -8,9 +8,9 @@ export interface StatePatch {
 export function reducePatch<TState extends object>(
     state: TState, patches: StatePatch[],
 ): TState {
-    return transform(state, ({ set }) => {
+    return transform(state, set => {
         for (const patch of patches) {
-            set(patch.path, patch.value);
+            set(patch.path as [], patch.value);
         }
     });
 }

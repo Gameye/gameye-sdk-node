@@ -66,6 +66,7 @@ test(
     "GameyeClient subscriptions async iterable",
     t => use(TestContext.create(), async ({ gameyeClient, apiTestServer }) => {
         const subscription = await gameyeClient.subscribe("testing", {});
+        const wait = whenFinished(subscription);
 
         const patches = [
             [{ path: ["number"], value: 1 }],
@@ -94,6 +95,6 @@ test(
 
         // it's very important to always cleanup a subscription!
         subscription.destroy();
-        await whenFinished(subscription);
+        await wait;
     }),
 );

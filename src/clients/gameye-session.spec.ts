@@ -39,4 +39,3 @@ test(
         await gameyeClient.querySessionArtifacts("id");
     }),
 );
-

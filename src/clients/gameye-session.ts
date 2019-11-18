@@ -88,6 +88,17 @@ export function querySession(
 }
 
 /**
+ * Fetch the session state
+ */
+export function querySessionArtifacts(
+    this: GameyeClient,
+    sessionId: string,
+    path?: string,
+) {
+    return this.query<models.SessionQueryState>("artifacts", { sessionId, path });
+}
+
+/**
  * Subscribe to the session state
  */
 export function subscribeSession(

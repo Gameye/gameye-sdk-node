@@ -5,7 +5,13 @@ import * as errors from "../errors";
 import * as streams from "../streams";
 import { isEmpty, reducePatch, writeAll } from "../utils";
 import { commandStartMatch, commandStopMatch, queryMatch, subscribeMatch } from "./gameye-match";
-import { commandSessionCancel, commandSessionRun, querySession, subscribeSession } from "./gameye-session";
+import {
+    commandSessionCancel,
+    commandSessionRun,
+    querySession,
+    querySessionArtifacts,
+    subscribeSession,
+} from "./gameye-session";
 import { queryStatistic, subscribeStatistic } from "./gameye-statistic";
 
 export interface GameyeClientConfig {
@@ -37,6 +43,7 @@ export class GameyeClient {
     public queryStatistic = queryStatistic;
     public queryMatch = queryMatch;
     public querySession = querySession;
+    public querySessionArtifacts = querySessionArtifacts;
 
     // #endregion
 

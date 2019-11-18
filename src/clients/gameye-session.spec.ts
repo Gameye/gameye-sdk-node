@@ -6,8 +6,8 @@ test(
     "GameyeClient commandSessionRun",
     t => use(TestContext.create(), async ({ gameyeClient }) => {
         await gameyeClient.commandSessionRun(
-            "match",
-            "game",
+            "id",
+            "image",
             "location",
             undefined,
             [],
@@ -21,7 +21,7 @@ test(
     "GameyeClient commandSessionCancel",
     t => use(TestContext.create(), async ({ gameyeClient }) => {
         await gameyeClient.commandSessionCancel(
-            "match",
+            "id",
         );
     }),
 );
@@ -32,3 +32,11 @@ test(
         await gameyeClient.querySession();
     }),
 );
+
+test(
+    "GameyeClient querySessionArtifacts",
+    t => use(TestContext.create(), async ({ gameyeClient }) => {
+        await gameyeClient.querySessionArtifacts("id");
+    }),
+);
+

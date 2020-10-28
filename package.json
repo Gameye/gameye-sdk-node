@@ -43,7 +43,6 @@
     "@types/http-errors": "^1.6.2",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/uuid": "^3.4.5",
-    "deepkit": "^1.1.0",
     "http-errors": "^1.7.3",
     "isomorphic-fetch": "^2.2.1",
     "msecs": "^1.0.0",

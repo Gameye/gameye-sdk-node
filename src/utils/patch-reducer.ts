@@ -1,4 +1,4 @@
-import { transform } from "deepkit";
+import { transform } from "../utils";
 
 export interface StatePatch {
     path: PropertyKey[];
